@@ -128,39 +128,12 @@ public class MainFragment extends Fragment {
 
             String API_KEY = getString(R.string.api_key);
 
-            Uri movieUri = Uri.parse(BASE_MOVIES_URL).buildUpon()
+            Uri movieUri = Uri.parse("http://api.themoviedb.org/3/discover/movie?").buildUpon()
                     .appendQueryParameter(MOVIES_SORT_PARAM, params[0])
                     .appendQueryParameter(API_KEY_PARAM, API_KEY)
                     .build(); // n results
 
-
-            HttpUrl retrofitUrl = HttpUrl.parse("http://api.themoviedb.org");
-
-
-            try {
-
-                Gson gson = new GsonBuilder()
-                        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                        .create();
-
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(retrofitUrl)
-                        .addConverterFactory(GsonConverterFactory.create(gson))
-                        .build();
-
-                MovieService service = retrofit.create(MovieService.class);
-                // Call<ResponseBody> moviesCall = service.listMovies("vote_average.desc");
-                Call<Movies> moviesCall = service.listMovies("vote_average.desc", API_KEY);
-                Response<Movies> moviesResponse = moviesCall.execute();
-                Log.d(LOG_TAG, String.valueOf(moviesResponse.isSuccess()));
-                List<Movies.Result> movies = moviesResponse.body().getResults();
-
-                Log.d(LOG_TAG, movies.get(0).getOverview());
-                Log.d(LOG_TAG, movies.get(1).getOverview());
-                Log.d(LOG_TAG, movies.get(19).getPosterPath());
-
-
-                Call<Reviews> reviewsCall = service.listReviews(135397, API_KEY);
+                /* Call<Reviews> reviewsCall = service.listReviews(135397, API_KEY);
                 Response<Reviews> reviewsResponse = reviewsCall.execute();
                 Log.d(LOG_TAG, String.valueOf(reviewsResponse.isSuccess()));
                 List<Reviews.Result> reviewses = reviewsResponse.body().getResults();
@@ -174,12 +147,8 @@ public class MainFragment extends Fragment {
                 List<Videos.Result> videoses = videosResponse.body().getResults();
                 Log.d(LOG_TAG, videoses.get(0).getId());
                 Log.d(LOG_TAG, videoses.get(0).getKey());
-                Log.d(LOG_TAG, videoses.get(1).getKey());
+                Log.d(LOG_TAG, videoses.get(1).getKey());*/
 
-
-            } catch (Exception e) {
-                Log.e(LOG_TAG, e.getMessage());
-            }
 
             String jsonString = httpGET(movieUri.toString());
             if (jsonString == null) return null;

@@ -6,14 +6,17 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+import telematic.cl.popmovies.sync.MovieSyncAdapter;
 
+public class MainActivity extends AppCompatActivity {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        MovieSyncAdapter.initializeSyncAdapter(this);
+        MovieSyncAdapter.syncImmediately(this);
 
     }
 

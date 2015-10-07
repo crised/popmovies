@@ -15,4 +15,8 @@
     <string name="pref_popular_value">popularity.desc</string>
     <string name="pref_rating_value">vote_average.desc</string>
 
+    <!-- SyncAdapter related -->
+    <string name="sync_account_type">popmovies.example.com</string>
+    <string name="content_authority">telematic.cl.popmovies</string>
+
 </resources>
