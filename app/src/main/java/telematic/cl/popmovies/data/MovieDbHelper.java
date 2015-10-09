@@ -33,7 +33,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 COLUMN_POPULARITY + " REAL, " +
                 COLUMN_TITLE + " TEXT, " +
                 COLUMN_VOTE_AVG + " REAL, " +
-                COLUMN_VOTE_COUNT + " REAL, " +
+                COLUMN_VOTE_COUNT + " INTEGER, " +
                 COLUMN_FAVORITE + " INTEGER NOT NULL, " +
                 COLUMN_REVIEWS + " TEXT, " +
                 COLUMN_VIDEOS + " Text"

@@ -95,7 +95,7 @@ public class TestProvider extends AndroidTestCase {
                 MovieContract.MovieEntry.CONTENT_TYPE, type);
 
         long movieId = 12;
-        //Movie: content://telematic.cl.popmovies/movies/12
+        //MovieOld: content://telematic.cl.popmovies/movies/12
         type = mContext.getContentResolver().getType(MovieContract.MovieEntry.buildMovieUri(movieId));
         // vnd.android.cursor.dir/com.example.android.sunshine.app/weather
         assertEquals("Error: the MovieEntry CONTENT_URI with location should return MovieEntry.CONTENT_TYPE",

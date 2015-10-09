@@ -12,7 +12,7 @@ public class MovieContract {
 
     //content://authority/path/id
     //Parent: content://telematic.cl.popmovies/movies
-    //Movie: content://telematic.cl.popmovies/movies/12
+    //MovieOld: content://telematic.cl.popmovies/movies/12
 
     public static final String CONTENT_AUTHORITY = "telematic.cl.popmovies";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);

@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 
 import telematic.cl.popmovies.net.MovieServiceHelper;
 
@@ -16,26 +17,30 @@ import static telematic.cl.popmovies.data.MovieContract.MovieEntry.*;
  */
 public class DetailUpdateService extends IntentService {
 
+    public final String LOG_TAG = DetailUpdateService.class.getSimpleName();
+
     public DetailUpdateService() {
         super("DetailUpdateService");
     }
 
+    //uri of selected movie
+    //fetchReviews, fetchVideos, *update* them.
     @Override
     protected void onHandleIntent(Intent intent) {
-
         Uri movieUri = intent.getParcelableExtra(MOVIE_ID);
         if (movieUri == null) return;
         Cursor cursor = getContentResolver().query(movieUri, null, null, null, null);
-        cursor.moveToFirst();
+        if (!cursor.moveToFirst()) return;
         long movieKey = cursor.getLong(COL_MOVIE_KEY);
+        if (movieKey == 0) return;
         MovieServiceHelper serviceHelper = new MovieServiceHelper(this);
         String reviews = serviceHelper.fetchReviews(movieKey);
         String videos = serviceHelper.fetchVideos(movieKey);
         ContentValues updatedValues = new ContentValues();
         updatedValues.put(COLUMN_REVIEWS, reviews);
         updatedValues.put(COLUMN_VIDEOS, videos);
-        getContentResolver().update(movieUri, updatedValues, null, new String[]{String.valueOf(movieKey)});
-
+        int rowUpdated = getContentResolver().update(movieUri, updatedValues, null, null); //movie/#
+        if (rowUpdated != 1) Log.e(LOG_TAG, "Couldn't update reviews & videos!");
         //delete all details from non favorites, as mainteinance.
     }
 

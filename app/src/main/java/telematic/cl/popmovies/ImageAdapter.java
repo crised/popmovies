@@ -11,7 +11,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import telematic.cl.popmovies.util.Movie;
 import telematic.cl.popmovies.util.Movies;
 
 /**
@@ -60,6 +59,7 @@ public class ImageAdapter extends BaseAdapter {
             Picasso.with(mContext).load(movie.getPosterUri()).into(imageView);
         return imageView;
     }
+
 
     public List<Movies.Result> getMovies() {
         return movies;

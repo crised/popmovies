@@ -48,7 +48,7 @@ public class TestNet extends AndroidTestCase {
         // Log.d(LOG_TAG, reviews.toString());
     }
 
-    public void testUpdateServie() {
+    public void testUpdateService() {
 
         deleteAllRecordsFromProvider();
 

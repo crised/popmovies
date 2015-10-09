@@ -138,7 +138,6 @@ public class MovieProvider extends ContentProvider {
         int rowsUpdated;
 
         long _id = ContentUris.parseId(uri);
-
         switch (sUriMatcher.match(uri)) {
             case MOVIE:
                 rowsUpdated = db.update(MovieContract.MovieEntry.TABLE_NAME,
