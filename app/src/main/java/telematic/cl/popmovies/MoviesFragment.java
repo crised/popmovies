@@ -1,5 +1,6 @@
 package telematic.cl.popmovies;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -21,17 +22,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import telematic.cl.popmovies.data.MovieContract;
+import telematic.cl.popmovies.sync.DetailUpdateService;
 import telematic.cl.popmovies.util.Movies;
 
 import static telematic.cl.popmovies.util.Consts.COL_DATE;
 import static telematic.cl.popmovies.util.Consts.COL_FAVORITE;
 import static telematic.cl.popmovies.util.Consts.COL_LANGUAGE;
+import static telematic.cl.popmovies.util.Consts.COL_MOVIE_ID;
 import static telematic.cl.popmovies.util.Consts.COL_MOVIE_KEY;
 import static telematic.cl.popmovies.util.Consts.COL_OVERVIEW;
 import static telematic.cl.popmovies.util.Consts.COL_POPULARITY;
 import static telematic.cl.popmovies.util.Consts.COL_POSTER_PATH;
 import static telematic.cl.popmovies.util.Consts.COL_TITLE;
 import static telematic.cl.popmovies.util.Consts.COL_VOTE_AVG;
+import static telematic.cl.popmovies.util.Consts.MOVIE_ID;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -100,12 +104,18 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         GridView gridview = (GridView) rootView.findViewById(R.id.gridview);
         gridview.setAdapter(mAdapter);
-       /* gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                //  Log.d(LOG_TAG, String.valueOf(position));
+                Intent serviceIntent = new Intent(getContext(), DetailUpdateService.class);
+                serviceIntent.putExtra(MOVIE_ID,
+                        MovieContract.MovieEntry.buildMovieUri(mMovies.get(position).get_id()));
+                getActivity().startService(serviceIntent);
+
+
+
             }
-        });*/
+        });
         return gridview;
     }
 
@@ -123,7 +133,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if(data.getCount()==0) return;
+        if (data.getCount() == 0) return;
         mCursorData = data;
         setListFromCursor();
         Log.d(LOG_TAG, "# Movies: " + String.valueOf(mMovies.size()));
@@ -141,6 +151,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         for (mCursorData.moveToFirst(); !mCursorData.isAfterLast(); mCursorData.moveToNext()) {
             Movies movies = new Movies();
             Movies.Result movie = movies.new Result();
+            movie.set_id(mCursorData.getInt(COL_MOVIE_ID));
             movie.setId(mCursorData.getInt(COL_MOVIE_KEY)); // not confuse _ID with movieKey=movieid
             movie.setOriginalLanguage(mCursorData.getString(COL_LANGUAGE));
             movie.setOverview(mCursorData.getString(COL_OVERVIEW));

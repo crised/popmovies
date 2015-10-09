@@ -25,6 +25,7 @@ public class Movies {
 
     public class Result {
 
+        private transient Integer _id;
         private Boolean adult;
         private String backdropPath;
         private List<String> genreIds = new ArrayList<String>();
@@ -47,6 +48,14 @@ public class Movies {
                     .appendPath(IMAGE_WIDTH)
                     .appendEncodedPath(posterPath)
                     .build();
+        }
+
+        public Integer get_id() {
+            return _id;
+        }
+
+        public void set_id(Integer _id) {
+            this._id = _id;
         }
 
         public Boolean getAdult() {

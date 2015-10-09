@@ -32,6 +32,7 @@ public class DetailUpdateService extends IntentService {
         Cursor cursor = getContentResolver().query(movieUri, null, null, null, null);
         if (!cursor.moveToFirst()) return;
         long movieKey = cursor.getLong(COL_MOVIE_KEY);
+        cursor.close();
         if (movieKey == 0) return;
         MovieServiceHelper serviceHelper = new MovieServiceHelper(this);
         String reviews = serviceHelper.fetchReviews(movieKey);
@@ -41,14 +42,18 @@ public class DetailUpdateService extends IntentService {
         updatedValues.put(COLUMN_VIDEOS, videos);
         int rowUpdated = getContentResolver().update(movieUri, updatedValues, null, null); //movie/#
         if (rowUpdated != 1) Log.e(LOG_TAG, "Couldn't update reviews & videos!");
-        //delete all details from non favorites, as mainteinance.
+        //testCode
+        Cursor updatedCursor = getContentResolver().query(movieUri, null, null, null, null);
+        updatedCursor.moveToFirst();
+        String col_reviews = updatedCursor.getString(COL_REVIEWS);
+        String col_videos = updatedCursor.getString(COL_VIDEOS);
+        if (!reviews.equals(col_reviews) || !videos.equals(col_videos))
+            Log.e(LOG_TAG, "Ouch...");
+        Log.d(LOG_TAG, updatedCursor.getString(COL_REVIEWS) + updatedCursor.getString(COL_VIDEOS));
+        updatedCursor.close();
+
+
     }
-
-// Add a Uri instance to an Intent
-    // intent.putExtra("imageUri", uri);
-
-    // Get a Uri from an Intent
-//    Uri uri = intent.getParcelableExtra("imageUri");
 
 
 }
