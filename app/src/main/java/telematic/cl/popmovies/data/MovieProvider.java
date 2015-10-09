@@ -116,9 +116,6 @@ public class MovieProvider extends ContentProvider {
         // this makes delete all rows return the number of rows deleted
         if (null == selection) selection = "1";
         switch (sUriMatcher.match(uri)) {
-            case MOVIE:
-                rowsDeleted = db.delete(MovieContract.MovieEntry.TABLE_NAME, selection, selectionArgs);
-                break;
             case MOVIES:
                 rowsDeleted = db.delete(MovieContract.MovieEntry.TABLE_NAME, selection, selectionArgs);
                 break;

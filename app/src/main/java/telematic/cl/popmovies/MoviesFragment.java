@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import java.util.ArrayList;
@@ -95,41 +96,23 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         mAdapter = new ImageAdapter(getContext());
-
-
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
         GridView gridview = (GridView) rootView.findViewById(R.id.gridview);
         gridview.setAdapter(mAdapter);
-
-        /*
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+       /* gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                MovieOld movie = mAdapter.getMovies().get(position);
-                Intent intent = new Intent(getActivity(), detail.class)
-                        .putExtra("title", movie.getTitle())
-                        .putExtra("uri", movie.getUri().toString())
-                        .putExtra("plot", movie.getPlot())
-                        .putExtra("rating", movie.getRating())
-                        .putExtra("date", movie.getDate());
-                startActivity(intent);
+                //  Log.d(LOG_TAG, String.valueOf(position));
             }
         });*/
-
-
         return gridview;
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-
-        Log.d(LOG_TAG, "Loader created");
         Uri moviesUri = MovieContract.MovieEntry.CONTENT_URI;
         String sortOrder = MovieContract.MovieEntry._ID + " ASC";
-
         return new CursorLoader(getActivity(),
                 moviesUri,
                 MOVIES_COLUMNS,
@@ -140,31 +123,20 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
+        if(data.getCount()==0) return;
         mCursorData = data;
         setListFromCursor();
+        Log.d(LOG_TAG, "# Movies: " + String.valueOf(mMovies.size()));
         mAdapter.getMovies().clear();
         mAdapter.getMovies().addAll(mMovies);
-
-        /*for(data.moveToFirst(); !data.isAfterLast(); data.moveToNext()) {
-            // The Cursor is now set to the right position
-            mArrayList.add(data.get(WHATEVER_COLUMN_INDEX_YOU_WANT));
-        }
-
-
-        mAdapter.getMovies().clear();
-        mAdapter.getMovies().addAll(movies);
-        mAdapter.notifyDataSetChanged();*/
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         loader = null;
-
     }
 
     private void setListFromCursor() {
-
         mMovies = new ArrayList<>();
         for (mCursorData.moveToFirst(); !mCursorData.isAfterLast(); mCursorData.moveToNext()) {
             Movies movies = new Movies();
@@ -181,9 +153,6 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
             movie.setFavorite(mCursorData.getInt(COL_FAVORITE));
             mMovies.add(movie);
         }
-
-
     }
-
 
 }

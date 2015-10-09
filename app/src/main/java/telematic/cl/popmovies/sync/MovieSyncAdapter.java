@@ -54,17 +54,23 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         getContext().getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, null, null);//delete everything
+        Log.d(LOG_TAG, "Total rows in DB: " + String.valueOf(
+                getContext().getContentResolver().query(
+                        MovieContract.MovieEntry.CONTENT_URI, null, null, null, null).getCount()));
         mMovies = new MovieServiceHelper(mContext).fetchMovies();
         if (mMovies == null) return; // no net
         fillCVVector();
         if (mcVVector.size() == 0) return;
         ContentValues[] cvArray = new ContentValues[mcVVector.size()];
         mcVVector.toArray(cvArray);
-        Integer deletedRowsNonFavorite;
-        deletedRowsNonFavorite = getContext().getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, sMoviesFavorites, new String[]{"0"});
-        Log.d(LOG_TAG, "Deleted:  " + deletedRowsNonFavorite + " non favorites rows.");
+        ///Integer deletedRowsNonFavorite;
         Integer insertedRows = getContext().getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, cvArray);
         Log.d(LOG_TAG, "Sync Complete. " + insertedRows + " Inserted");
+        Log.d(LOG_TAG, "Total rows in DB: " + String.valueOf(
+                getContext().getContentResolver().query(
+                        MovieContract.MovieEntry.CONTENT_URI, null, null, null, null).getCount()));
+
+
         // deletedRowsNonFavorite = getContext().getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, sMoviesFavorites, new String[]{"0"});
         //Log.d(LOG_TAG, "Deleted:  " + deletedRowsNonFavorite + " non favorites rows.");
         //notifyWeather(); //checking the last update and notify if it' the first of the day
