@@ -33,6 +33,10 @@ public class MovieProvider extends ContentProvider {
             MovieContract.MovieEntry.TABLE_NAME + "." +
                     MovieContract.MovieEntry._ID + " = ? ";
 
+    private static final String sMovieKeySelection =
+            MovieContract.MovieEntry.TABLE_NAME + "." +
+                    MovieContract.MovieEntry.COLUMN_MOVIE_KEY + " = ? ";
+
     static {
         sMovieQueryBuilder.setTables(MovieContract.MovieEntry.TABLE_NAME);
     }
@@ -92,7 +96,7 @@ public class MovieProvider extends ContentProvider {
             case MOVIES: {
                 long _id = db.insert(MovieContract.MovieEntry.TABLE_NAME, null, values);
                 if (_id > 0)
-                    returnUri = MovieContract.MovieEntry.buildWeatherUri(_id);
+                    returnUri = MovieContract.MovieEntry.buildMovieUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
@@ -132,10 +136,15 @@ public class MovieProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mMovieDbHelper.getWritableDatabase();
         int rowsUpdated;
+
+        long _id = ContentUris.parseId(uri);
+
         switch (sUriMatcher.match(uri)) {
             case MOVIE:
-                rowsUpdated = db.update(MovieContract.MovieEntry.TABLE_NAME, values, selection,
-                        selectionArgs);
+                rowsUpdated = db.update(MovieContract.MovieEntry.TABLE_NAME,
+                        values,
+                        sMovieIdSelection,
+                        new String[]{String.valueOf(_id)});
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);

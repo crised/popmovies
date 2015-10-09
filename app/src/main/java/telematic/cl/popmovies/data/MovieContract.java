@@ -42,8 +42,10 @@ public class MovieContract {
         public static final String COLUMN_VOTE_AVG = "vote_avg";
         public static final String COLUMN_VOTE_COUNT = "vote_count";
         public static final String COLUMN_FAVORITE = "favorite";
+        public static final String COLUMN_REVIEWS = "reviews";
+        public static final String COLUMN_VIDEOS = "videos";
 
-        public static Uri buildWeatherUri(long id) {
+        public static Uri buildMovieUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 

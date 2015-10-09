@@ -19,14 +19,11 @@ public class MovieSyncService extends Service {
     @Override
     public void onCreate() {
         Log.d(LOG_TAG, "onCreate - SyncService");
-
         synchronized (sSyncAdapterLock) {
             if (sMovieSyncAdapter == null) {
                 sMovieSyncAdapter = new MovieSyncAdapter(getApplicationContext(), true);
             }
         }
-
-
     }
 
     @Nullable

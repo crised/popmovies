@@ -63,6 +63,9 @@ public class TestDb extends AndroidTestCase {
         movieColumns.add(COLUMN_TITLE);
         movieColumns.add(COLUMN_VOTE_AVG);
         movieColumns.add(COLUMN_VOTE_COUNT);
+        movieColumns.add(COLUMN_FAVORITE);
+        movieColumns.add(COLUMN_REVIEWS);
+        movieColumns.add(COLUMN_VIDEOS);
 
         int columnNameIndex = c.getColumnIndex("name");
         do {
@@ -99,6 +102,41 @@ public class TestDb extends AndroidTestCase {
         // Move the cursor to demonstrate that there is only one record in the database
         assertFalse("Error: More than one record returned from location query",
                 cursor.moveToNext());
+
+
+        cursor.close();
+        db.close();
+
+
+    }
+
+    public void testUpdateMovie() {
+        Log.d(LOG_TAG, "Hi");
+
+        SQLiteDatabase db = new MovieDbHelper(mContext).getWritableDatabase();
+        assertEquals(true, db.isOpen());
+
+        long movieRowId;
+        ContentValues testValues = createMovieValues();
+
+        movieRowId = db.insert(TABLE_NAME, null, testValues);
+        assertTrue(movieRowId != -1); //WE got a row back
+
+        Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, null);
+
+
+        assertTrue("Error: No Records returned from location query", cursor.moveToFirst());
+        Log.d(LOG_TAG, "Reviews: " + cursor.getString(11));
+        Log.d(LOG_TAG, "Videos: " + cursor.getString(12));
+        Log.d(LOG_TAG, "Hi");
+
+        TestUtilities.validateCurrentRecord("Error: Location Query Validation Failed",
+                cursor, testValues);
+
+        // Move the cursor to demonstrate that there is only one record in the database
+        assertFalse("Error: More than one record returned from location query",
+                cursor.moveToNext());
+
 
 
         cursor.close();

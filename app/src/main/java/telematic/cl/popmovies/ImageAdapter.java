@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import telematic.cl.popmovies.util.Movie;
+import telematic.cl.popmovies.util.Movies;
 
 /**
  * Created by crised on 22-09-15.
@@ -21,7 +22,7 @@ public class ImageAdapter extends BaseAdapter {
     private static final String LOG_TAG = ImageAdapter.class.getSimpleName();
 
     private Context mContext;
-    private List<Movie> movies;
+    private List<Movies.Result> movies;
 
     public ImageAdapter(Context c) {
         mContext = c;
@@ -54,13 +55,13 @@ public class ImageAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
 
-        Movie movie = movies.get(position);
+        Movies.Result movie = movies.get(position);
         if (movie != null)
-            Picasso.with(mContext).load(movie.getUri()).into(imageView);
+            Picasso.with(mContext).load(movie.getPosterUri()).into(imageView);
         return imageView;
     }
 
-    public List<Movie> getMovies() {
+    public List<Movies.Result> getMovies() {
         return movies;
     }
 }

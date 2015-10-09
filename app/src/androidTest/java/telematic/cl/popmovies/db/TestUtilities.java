@@ -36,6 +36,8 @@ public class TestUtilities extends AndroidTestCase {
         testValues.put(COLUMN_VOTE_AVG, 8);
         testValues.put(COLUMN_VOTE_COUNT, 123);
         testValues.put(COLUMN_FAVORITE, 0);
+        testValues.put(COLUMN_REVIEWS, "");
+        testValues.put(COLUMN_VIDEOS, "");
         return testValues;
     }
 
@@ -51,6 +53,8 @@ public class TestUtilities extends AndroidTestCase {
         testValues.put(COLUMN_VOTE_AVG, 8);
         testValues.put(COLUMN_VOTE_COUNT, 123);
         testValues.put(COLUMN_FAVORITE, 0);
+        testValues.put(COLUMN_REVIEWS, "");
+        testValues.put(COLUMN_VIDEOS, "");
         return testValues;
     }
 

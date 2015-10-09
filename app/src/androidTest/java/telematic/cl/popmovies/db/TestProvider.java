@@ -11,9 +11,14 @@ import android.net.Uri;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
+import java.util.Vector;
+
 import telematic.cl.popmovies.data.MovieContract;
 import telematic.cl.popmovies.data.MovieDbHelper;
 import telematic.cl.popmovies.data.MovieProvider;
+import telematic.cl.popmovies.net.MovieServiceHelper;
+import telematic.cl.popmovies.util.Movies;
+
 
 /**
  * Created by crised on 07-10-15.
@@ -91,7 +96,7 @@ public class TestProvider extends AndroidTestCase {
 
         long movieId = 12;
         //Movie: content://telematic.cl.popmovies/movies/12
-        type = mContext.getContentResolver().getType(MovieContract.MovieEntry.buildWeatherUri(movieId));
+        type = mContext.getContentResolver().getType(MovieContract.MovieEntry.buildMovieUri(movieId));
         // vnd.android.cursor.dir/com.example.android.sunshine.app/weather
         assertEquals("Error: the MovieEntry CONTENT_URI with location should return MovieEntry.CONTENT_TYPE",
                 MovieContract.MovieEntry.CONTENT_ITEM_TYPE, type);
@@ -151,7 +156,7 @@ public class TestProvider extends AndroidTestCase {
         locationCursor.registerContentObserver(tco);
 
         int count = mContext.getContentResolver().update(
-                MovieContract.MovieEntry.buildWeatherUri(locationRowId), updatedValues, null, null);
+                MovieContract.MovieEntry.buildMovieUri(locationRowId), updatedValues, null, null);
         assertEquals(count, 1);
 
         // Test to make sure our observer is called.  If not, we throw an assertion.
@@ -165,7 +170,7 @@ public class TestProvider extends AndroidTestCase {
 
         // A cursor is your primary interface to the query results.
         Cursor cursor = mContext.getContentResolver().query(
-                MovieContract.MovieEntry.buildWeatherUri(locationRowId),
+                MovieContract.MovieEntry.buildMovieUri(locationRowId),
                 null,   // projection
                 null,
                 null,   // Values for the "where" clause
@@ -222,6 +227,8 @@ public class TestProvider extends AndroidTestCase {
         }
         cursor.close();
     }
+
+
 
 
 }

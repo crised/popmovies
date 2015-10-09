@@ -5,31 +5,22 @@ import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SyncRequest;
 import android.content.SyncResult;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.squareup.okhttp.HttpUrl;
-
-import java.io.IOException;
 import java.util.List;
+import java.util.Vector;
 
-import retrofit.Call;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
-import telematic.cl.popmovies.MovieService;
 import telematic.cl.popmovies.R;
+import telematic.cl.popmovies.data.MovieContract;
+import telematic.cl.popmovies.net.MovieServiceHelper;
 import telematic.cl.popmovies.util.Movies;
 
-import static telematic.cl.popmovies.util.Consts.BASE_MOVIES_URL;
 
 /**
  * Created by crised on 07-10-15.
@@ -38,57 +29,65 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
     public final String LOG_TAG = MovieSyncAdapter.class.getSimpleName();
 
-    String API_KEY;
+    private Context mContext;
 
     public static final int SYNC_INTERVAL = 60 * 180;
-    public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
+    public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
+
+    private List<Movies.Result> mMovies;
+    private String mReviewsJson;
+    private String mTrailerJson;
+
+    private Vector<ContentValues> mcVVector;
+
+    private static final String sMoviesFavorites =
+            MovieContract.MovieEntry.TABLE_NAME + "." +
+                    MovieContract.MovieEntry.COLUMN_FAVORITE
+                    + " = ?";
 
 
     public MovieSyncAdapter(Context context, boolean autoInitialize) {
-
         super(context, autoInitialize);
-        Log.d(LOG_TAG, "Creating Service");
-        API_KEY = context.getString(R.string.api_key);
-
+        mContext = context;
     }
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
+        mMovies = new MovieServiceHelper(mContext).fetchMovies();
+        if (mMovies == null) return; // no net
+        fillCVVector();
+        if (mcVVector.size() == 0) return;
+        ContentValues[] cvArray = new ContentValues[mcVVector.size()];
+        mcVVector.toArray(cvArray);
+        Integer deletedRowsNonFavorite;
+        deletedRowsNonFavorite = getContext().getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, sMoviesFavorites, new String[]{"0"});
+        Log.d(LOG_TAG, "Deleted:  " + deletedRowsNonFavorite + " non favorites rows.");
+        getContext().getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, cvArray);
+        Log.d(LOG_TAG, "Sync Complete. " + mcVVector.size() + " Inserted");
+        // deletedRowsNonFavorite = getContext().getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, sMoviesFavorites, new String[]{"0"});
+        //Log.d(LOG_TAG, "Deleted:  " + deletedRowsNonFavorite + " non favorites rows.");
+        //notifyWeather(); //checking the last update and notify if it' the first of the day
+    }
 
 
-        try {
-
-
-            HttpUrl retrofitUrl = HttpUrl.parse(BASE_MOVIES_URL);
-
-
-            Gson gson = new GsonBuilder()
-                    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                    .create();
-
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(retrofitUrl)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .build();
-
-            MovieService service = retrofit.create(MovieService.class);
-            // Call<ResponseBody> moviesCall = service.listMovies("vote_average.desc");
-            Call<Movies> moviesCall = service.listMovies("vote_average.desc", API_KEY);
-            Response<Movies> moviesResponse = moviesCall.execute();
-            Log.d(LOG_TAG, String.valueOf(moviesResponse.isSuccess()));
-            List<Movies.Result> movies = moviesResponse.body().getResults();
-
-            Log.d(LOG_TAG, movies.get(0).getOverview());
-            Log.d(LOG_TAG, movies.get(1).getOverview());
-            Log.d(LOG_TAG, movies.get(19).getPosterPath());
-
-
-        } catch (IOException e) {
-
-            Log.d(LOG_TAG, "Internet Connection Problem");
-
+    private void fillCVVector() {
+        mcVVector = new Vector<>(mMovies.size());
+        for (Movies.Result movie : mMovies) {
+            ContentValues movieValues = new ContentValues();
+            Integer movieId = movie.getId();
+            if (movieId == null) break;
+            movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_KEY, movie.getId());
+            movieValues.put(MovieContract.MovieEntry.COLUMN_LANGUAGE, movie.getOriginalLanguage());
+            movieValues.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, movie.getOverview());
+            movieValues.put(MovieContract.MovieEntry.COLUMN_DATE, movie.getReleaseDate());
+            movieValues.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, movie.getPosterPath());
+            movieValues.put(MovieContract.MovieEntry.COLUMN_POPULARITY, movie.getPopularity());
+            movieValues.put(MovieContract.MovieEntry.COLUMN_TITLE, movie.getTitle());
+            movieValues.put(MovieContract.MovieEntry.COLUMN_VOTE_AVG, movie.getVoteAverage());
+            movieValues.put(MovieContract.MovieEntry.COLUMN_VOTE_COUNT, movie.getVoteCount());
+            movieValues.put(MovieContract.MovieEntry.COLUMN_FAVORITE, "0");
+            mcVVector.add(movieValues);
         }
-
     }
 
 

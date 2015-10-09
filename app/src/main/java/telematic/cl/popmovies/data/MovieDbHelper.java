@@ -25,7 +25,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE " +
                 TABLE_NAME + " (" +
                 _ID + " INTEGER PRIMARY KEY, " +
-                COLUMN_MOVIE_KEY + " INTEGER NOT NULL, " +
+                COLUMN_MOVIE_KEY + " INTEGER NOT NULL UNIQUE, " +
                 COLUMN_LANGUAGE + " TEXT, " +
                 COLUMN_OVERVIEW + " TEXT, " +
                 COLUMN_DATE + " TEXT, " +
@@ -34,7 +34,10 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 COLUMN_TITLE + " TEXT, " +
                 COLUMN_VOTE_AVG + " REAL, " +
                 COLUMN_VOTE_COUNT + " REAL, " +
-                COLUMN_FAVORITE + " INTEGER NOT NULL"
+                COLUMN_FAVORITE + " INTEGER NOT NULL, " +
+                COLUMN_REVIEWS + " TEXT, " +
+                COLUMN_VIDEOS + " Text"
+
 
                 + ")";
 

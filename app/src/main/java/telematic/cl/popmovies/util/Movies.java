@@ -4,10 +4,15 @@ package telematic.cl.popmovies.util;
  * Created by crised on 05-10-15.
  */
 
+import android.net.Uri;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static telematic.cl.popmovies.util.Consts.BASE_POSTER_URL;
+import static telematic.cl.popmovies.util.Consts.IMAGE_WIDTH;
 
 public class Movies {
 
@@ -16,6 +21,8 @@ public class Movies {
     private Integer totalPages;
     private Integer totalResults;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+
 
     public class Result {
 
@@ -34,6 +41,16 @@ public class Movies {
         private Double voteAverage;
         private Integer voteCount;
         private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+        public Uri getPosterUri(){
+
+            return Uri.parse(BASE_POSTER_URL).buildUpon()
+                    .appendPath(IMAGE_WIDTH)
+                    .appendEncodedPath(posterPath)
+                    .build();
+
+
+        }
 
         public Boolean getAdult() {
             return adult;
@@ -115,4 +132,5 @@ public class Movies {
     public Map<String, Object> getAdditionalProperties() {
         return additionalProperties;
     }
+
 }

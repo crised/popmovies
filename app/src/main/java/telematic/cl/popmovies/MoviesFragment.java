@@ -1,7 +1,11 @@
 package telematic.cl.popmovies;
 
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -14,11 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.squareup.okhttp.HttpUrl;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,17 +32,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.Call;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
+import telematic.cl.popmovies.data.MovieContract;
 import telematic.cl.popmovies.util.Movie;
 import telematic.cl.popmovies.util.Movies;
-import telematic.cl.popmovies.util.Reviews;
-import telematic.cl.popmovies.util.Videos;
 
 import static telematic.cl.popmovies.util.Consts.API_KEY_PARAM;
-import static telematic.cl.popmovies.util.Consts.BASE_MOVIES_URL;
 import static telematic.cl.popmovies.util.Consts.BASE_POSTER_URL;
 import static telematic.cl.popmovies.util.Consts.IMAGE_WIDTH;
 import static telematic.cl.popmovies.util.Consts.MOVIES_SORT_PARAM;
@@ -51,16 +44,42 @@ import static telematic.cl.popmovies.util.Consts.MOVIES_SORT_PARAM;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainFragment extends Fragment {
+public class MoviesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
-    private static final String LOG_TAG = MainFragment.class.getSimpleName();
+    private static final String LOG_TAG = MoviesFragment.class.getSimpleName();
 
+    private static final int MOVIES_LOADER = 0;
 
     private ImageAdapter mAdapter;
 
-    public MainFragment() {
+    private List<Movies.Result> movies;
 
+    private static final String[] MOVIES_COLUMNS = {
+            MovieContract.MovieEntry._ID,
+            MovieContract.MovieEntry.COLUMN_MOVIE_KEY,
+            MovieContract.MovieEntry.COLUMN_OVERVIEW,
+            MovieContract.MovieEntry.COLUMN_DATE,
+            MovieContract.MovieEntry.COLUMN_POSTER_PATH,
+            MovieContract.MovieEntry.COLUMN_POPULARITY,
+            MovieContract.MovieEntry.COLUMN_TITLE,
+            MovieContract.MovieEntry.COLUMN_VOTE_AVG,
+            MovieContract.MovieEntry.COLUMN_VOTE_COUNT,
+            MovieContract.MovieEntry.COLUMN_FAVORITE
+    };
+
+    static final int COL_ID = 0;
+    static final int COL_MOVIE_KEY = 1;
+    static final int COL_OVERVIEW = 2;
+    static final int COL_DATE = 3;
+    static final int COL_POSTER_PATH = 4;
+    static final int COL_POPULARITY = 5;
+    static final int COL_TITLE = 6;
+    static final int COL_VOTE_AVG = 7;
+    static final int COL_VOTE_COUNT = 8;
+    static final int COL_FAVORITE = 9;
+
+    public MoviesFragment() {
     }
 
     @Override
@@ -95,6 +114,7 @@ public class MainFragment extends Fragment {
         GridView gridview = (GridView) rootView.findViewById(R.id.gridview);
         gridview.setAdapter(mAdapter);
 
+        /*
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
@@ -107,20 +127,56 @@ public class MainFragment extends Fragment {
                         .putExtra("date", movie.getDate());
                 startActivity(intent);
             }
-        });
+        });*/
 
 
         return gridview;
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        Uri moviesUri = MovieContract.MovieEntry.CONTENT_URI;
+        String sortOrder = MovieContract.MovieEntry._ID + " ASC";
+
+        return new CursorLoader(getActivity(),
+                moviesUri,
+                MOVIES_COLUMNS,
+                null,
+                null,
+                sortOrder);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+        movies = new ArrayList<>();
+
+        /*for(data.moveToFirst(); !data.isAfterLast(); data.moveToNext()) {
+            // The Cursor is now set to the right position
+            mArrayList.add(data.get(WHATEVER_COLUMN_INDEX_YOU_WANT));
+        }
+
+
+        mAdapter.getMovies().clear();
+        mAdapter.getMovies().addAll(movies);
+        mAdapter.notifyDataSetChanged();*/
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        loader = null;
+
+    }
 
     public class NetTask extends AsyncTask<String, Void, List<Movie>> {
 
         @Override
         protected void onPostExecute(List<Movie> movies) {
-            mAdapter.getMovies().clear();
+
+            /*mAdapter.getMovies().clear();
             mAdapter.getMovies().addAll(movies);
-            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyDataSetChanged();*/
         }
 
         @Override

@@ -1,4 +1,4 @@
-package telematic.cl.popmovies;
+package telematic.cl.popmovies.net;
 
 
 import retrofit.Call;
@@ -21,10 +21,10 @@ public interface MovieService {
                             @Query(API_KEY_PARAM) String apikey);
 
     @GET("3/movie/{id}/reviews")
-    Call<Reviews> listReviews(@Path("id") Integer id, @Query(API_KEY_PARAM) String apikey);
+    Call<Reviews> listReviews(@Path("id") long id, @Query(API_KEY_PARAM) String apikey);
 
     @GET("3/movie/{id}/videos")
-    Call<Videos> listVideos(@Path("id") Integer id, @Query(API_KEY_PARAM) String apikey);
+    Call<Videos> listVideos(@Path("id") long id, @Query(API_KEY_PARAM) String apikey);
 
 
 
