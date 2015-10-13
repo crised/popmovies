@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import telematic.cl.popmovies.data.MovieContract;
-import telematic.cl.popmovies.sync.DetailUpdateService;
+import telematic.cl.popmovies.sync.DetailNetworkUpdateService;
 import telematic.cl.popmovies.util.Movies;
 
 import static telematic.cl.popmovies.util.Consts.COL_DATE;
@@ -49,7 +49,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
     private ImageAdapter mAdapter;
 
-    private List<Movies.Result> mMovies;
+    private List<Movies.Result> mMovieList;
     private Cursor mCursorData;
 
     private static final String[] MOVIES_COLUMNS = {
@@ -70,6 +70,11 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
     public MoviesFragment() {
     }
+
+    public interface Callback {
+        public void onItemSelected(Uri movieUri);
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -107,17 +112,24 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                Intent serviceIntent = new Intent(getContext(), DetailUpdateService.class);
-                serviceIntent.putExtra(MOVIE_ID,
-                        MovieContract.MovieEntry.buildMovieUri(mMovies.get(position).get_id()));
+                Uri movieUri = MovieContract.MovieEntry.
+                        buildMovieUri(mMovieList.get(position).get_id());
+
+                //Start DetailUpdateServie, no matter what.
+                Intent serviceIntent = new Intent(getContext(), DetailNetworkUpdateService.class);
+                serviceIntent.putExtra(MOVIE_ID, movieUri);
                 getActivity().startService(serviceIntent);
 
-
+                //Let parent Activity, either update fragment or
+                Callback callbackActivity = (Callback) getActivity();
+                callbackActivity.onItemSelected(movieUri);
 
             }
         });
         return gridview;
     }
+
+
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -136,9 +148,9 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         if (data.getCount() == 0) return;
         mCursorData = data;
         setListFromCursor();
-        Log.d(LOG_TAG, "# Movies: " + String.valueOf(mMovies.size()));
+        Log.d(LOG_TAG, "# Movies: " + String.valueOf(mMovieList.size()));
         mAdapter.getMovies().clear();
-        mAdapter.getMovies().addAll(mMovies);
+        mAdapter.getMovies().addAll(mMovieList);
     }
 
     @Override
@@ -147,7 +159,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     private void setListFromCursor() {
-        mMovies = new ArrayList<>();
+        mMovieList = new ArrayList<>();
         for (mCursorData.moveToFirst(); !mCursorData.isAfterLast(); mCursorData.moveToNext()) {
             Movies movies = new Movies();
             Movies.Result movie = movies.new Result();
@@ -162,7 +174,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
             movie.setVoteAverage(mCursorData.getDouble(COL_VOTE_AVG));
             movie.setVoteCount(mCursorData.getInt(COL_VOTE_AVG));
             movie.setFavorite(mCursorData.getInt(COL_FAVORITE));
-            mMovies.add(movie);
+            mMovieList.add(movie);
         }
     }
 

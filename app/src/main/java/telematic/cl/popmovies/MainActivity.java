@@ -1,18 +1,22 @@
 package telematic.cl.popmovies;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import telematic.cl.popmovies.sync.MovieSyncAdapter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MoviesFragment.Callback {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
+
+    private boolean mTwoPane;
 
 
     @Override
@@ -21,8 +25,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         MovieSyncAdapter.initializeSyncAdapter(this);
         MovieSyncAdapter.syncImmediately(this);
-        if (findViewById(R.id.main_activity) == null) {
+        if (findViewById(R.id.detail_container) != null) {
             Log.d(LOG_TAG, "Inside a tablet!");
+            mTwoPane = true;
             //We have only one activity, we needs to inflate fragment.
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
@@ -31,8 +36,28 @@ public class MainActivity extends AppCompatActivity {
                                 DETAILFRAGMENT_TAG)
                         .commit();
             }
+        } else mTwoPane = false;
+    }
 
+    @Override
+    public void onItemSelected(Uri movieUri) {
+        Log.d(LOG_TAG, "On main activity");
+        if (mTwoPane) {
+            Log.d(LOG_TAG, "On a tablet!");
+            Bundle args = new Bundle();
+            args.putParcelable(DetailFragment.DETAIL_URI, movieUri);
+            DetailFragment fragment = new DetailFragment();
+            fragment.setArguments(args);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detail_container, fragment, DETAILFRAGMENT_TAG)
+                    .commit();
+        } else {
+            Log.d(LOG_TAG, "On a phone!");
+            Intent intent = new Intent(this, DetailActivity.class)
+                    .setData(movieUri);
+            startActivity(intent);
         }
+
     }
 
     @Override
