@@ -9,9 +9,10 @@ import android.view.MenuItem;
 
 import telematic.cl.popmovies.sync.MovieSyncAdapter;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
 
     @Override
@@ -20,9 +21,16 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
         MovieSyncAdapter.initializeSyncAdapter(this);
         MovieSyncAdapter.syncImmediately(this);
-        if(findViewById(R.id.detail_container)==null){
-
-            Log.d(LOG_TAG,"Inside a tablet!");
+        if (findViewById(R.id.main_activity) == null) {
+            Log.d(LOG_TAG, "Inside a tablet!");
+            //We have only one activity, we needs to inflate fragment.
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.detail_container,
+                                new DetailFragment(),
+                                DETAILFRAGMENT_TAG)
+                        .commit();
+            }
 
         }
     }
