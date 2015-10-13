@@ -3,12 +3,15 @@ package telematic.cl.popmovies;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import telematic.cl.popmovies.sync.MovieSyncAdapter;
 
 public class MainActivity extends AppCompatActivity  {
+
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
 
     @Override
@@ -17,6 +20,11 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
         MovieSyncAdapter.initializeSyncAdapter(this);
         MovieSyncAdapter.syncImmediately(this);
+        if(findViewById(R.id.detail_container)==null){
+
+            Log.d(LOG_TAG,"Inside a tablet!");
+
+        }
     }
 
     @Override

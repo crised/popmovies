@@ -14,9 +14,9 @@ import com.squareup.picasso.Picasso;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class detailFragment extends Fragment {
+public class DetailFragment extends Fragment {
 
-    public detailFragment() {
+    public DetailFragment() {
     }
 
     @Override

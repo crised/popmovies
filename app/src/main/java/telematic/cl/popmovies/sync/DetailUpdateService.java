@@ -51,8 +51,6 @@ public class DetailUpdateService extends IntentService {
             Log.e(LOG_TAG, "Ouch...");
         Log.d(LOG_TAG, updatedCursor.getString(COL_REVIEWS) + updatedCursor.getString(COL_VIDEOS));
         updatedCursor.close();
-
-
     }
 
 

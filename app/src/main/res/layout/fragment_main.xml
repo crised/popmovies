@@ -9,4 +9,4 @@
     android:horizontalSpacing="10dp"
     android:stretchMode="columnWidth"
     android:gravity="center"
-    android:descendantFocusability="blocksDescendants" /><!--new-->
+    android:descendantFocusability="blocksDescendants" />
