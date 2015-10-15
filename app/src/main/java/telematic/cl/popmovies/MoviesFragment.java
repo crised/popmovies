@@ -124,7 +124,6 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
                 //Let parent Activity, either update fragment or
                 Callback callbackActivity = (Callback) getActivity();
                 callbackActivity.onItemSelected(movieUri);
-
             }
         });
         return rootView;

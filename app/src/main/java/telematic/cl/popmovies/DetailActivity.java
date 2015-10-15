@@ -22,7 +22,7 @@ public class DetailActivity extends AppCompatActivity {
             fragment.setArguments(arguments);
 
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.detail_container, fragment) //detail_cotainer from activity_detail.xml
+                    .add(R.id.detail_fragment_container, fragment) //detail_cotainer from activity_detail.xml
                     .commit();
         }
     }

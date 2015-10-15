@@ -47,17 +47,17 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "In Detail Fragment");
         Bundle arguments = getArguments();
         if (arguments != null) {
             mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
         }
-        Log.d(LOG_TAG, "In Detail Fragment");
         View root = inflater.inflate(R.layout.fragment_detail, container, false);
         mPlot = (TextView) root.findViewById(R.id.detail_plot);
         mRating = (TextView) root.findViewById(R.id.detail_rating_date);
         mImageView = (ImageView) root.findViewById(R.id.detail_view);
         mTitle = (TextView) root.findViewById(R.id.detail_title);
-        mPlot.setText("Plot Placeholder");
+       // mPlot.setText("Plot Placeholder");
         return root;
 
 

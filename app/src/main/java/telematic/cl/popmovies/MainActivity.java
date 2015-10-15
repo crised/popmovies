@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import telematic.cl.popmovies.sync.MovieSyncAdapter;
 
@@ -23,19 +24,23 @@ public class MainActivity extends AppCompatActivity implements MoviesFragment.Ca
         MovieSyncAdapter.syncImmediately(this);
         Log.d(LOG_TAG, "onCreate");
         setContentView(R.layout.activity_main);
-        if (findViewById(R.id.detail_container) != null) {
+        View detail_fragment_container_view = findViewById(R.id.detail_fragment_container);
+        if(detail_fragment_container_view!=null) Log.d(LOG_TAG, detail_fragment_container_view.toString());
+        else Log.d(LOG_TAG,"Can't find detail_fragment_container_view!!");
+        if (findViewById(R.id.detail_fragment_container) != null) {
             Log.d(LOG_TAG, "Inside a tablet!");
             mTwoPane = true;
             //We have only one activity, we needs to inflate fragment.
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.detail_container,
+                        .replace(R.id.detail_fragment_container,
                                 new DetailFragment(),
                                 DETAILFRAGMENT_TAG)
                         .commit();
             }
         } else mTwoPane = false;
     }
+
 
     @Override
     public void onItemSelected(Uri movieUri) {
@@ -47,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements MoviesFragment.Ca
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(args);
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.detail_container, fragment, DETAILFRAGMENT_TAG)
+                    .replace(R.id.detail_fragment_container, fragment, DETAILFRAGMENT_TAG)
                     .commit();
         } else {
             Log.d(LOG_TAG, "On a phone!");

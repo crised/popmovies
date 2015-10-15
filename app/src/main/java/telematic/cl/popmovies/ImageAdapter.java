@@ -31,7 +31,7 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     public int getCount() {
-        Log.d(LOG_TAG, "getCount: " + movies.size());
+        //Log.d(LOG_TAG, "getCount: " + movies.size());
         return movies.size();
     }
 
@@ -45,11 +45,11 @@ public class ImageAdapter extends BaseAdapter {
 
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.d(LOG_TAG, "getView");
+     //   Log.d(LOG_TAG, "getView");
 
         ImageView imageView;
         if (convertView == null) {
-            Log.d(LOG_TAG, "convertView  null");
+//            Log.d(LOG_TAG, "convertView  null");
 
             // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
@@ -58,7 +58,7 @@ public class ImageAdapter extends BaseAdapter {
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(0, 0, 0, 0);
         } else {
-            Log.d(LOG_TAG, "convertView not  null");
+   //         Log.d(LOG_TAG, "convertView not  null");
 
             imageView = (ImageView) convertView;
         }
