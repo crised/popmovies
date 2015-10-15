@@ -1,14 +1,18 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--programmatically add the fragment to an existing ViewGroup.-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:id="@+id/gridview_fragment_container"
+    android:name="telematic.cl.popmovies.MoviesFragment"
+    android:layout_width="555dp"
     android:layout_height="match_parent"
+    android:layout_toLeftOf="@+id/detail_fragment_container"
     tools:context="telematic.cl.popmovies.MoviesFragment">
 
     <GridView
         android:id="@+id/gridview"
-        android:layout_width="match_parent"
+        android:layout_width="555dp"
         android:layout_height="match_parent"
-        android:columnWidth="185px"
+        android:columnWidth="185dp"
         android:numColumns="@integer/columns"
         android:stretchMode="none" />
-</FrameLayout>
+</RelativeLayout>

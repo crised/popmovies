@@ -1,13 +1,15 @@
 package telematic.cl.popmovies;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.view.ViewGroup;
 
 import telematic.cl.popmovies.sync.MovieSyncAdapter;
 
@@ -15,29 +17,43 @@ public class MainActivity extends AppCompatActivity implements MoviesFragment.Ca
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
+    private static final String MOVIESFRAGMENT_TAG = "MFTAG";
     private boolean mTwoPane;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MovieSyncAdapter.initializeSyncAdapter(this);
         MovieSyncAdapter.syncImmediately(this);
-        Log.d(LOG_TAG, "onCreate");
+        Log.d(LOG_TAG, "onCreate, before setContentView");
         setContentView(R.layout.activity_main);
-        View detail_fragment_container_view = findViewById(R.id.detail_fragment_container);
-        if(detail_fragment_container_view!=null) Log.d(LOG_TAG, detail_fragment_container_view.toString());
-        else Log.d(LOG_TAG,"Can't find detail_fragment_container_view!!");
-        if (findViewById(R.id.detail_fragment_container) != null) {
+        Log.d(LOG_TAG, "onCreate, after setContentView");
+        if (findViewById(R.id.sw600dp) != null) {
             Log.d(LOG_TAG, "Inside a tablet!");
             mTwoPane = true;
             //We have only one activity, we needs to inflate fragment.
-            if (savedInstanceState == null) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.detail_fragment_container,
-                                new DetailFragment(),
-                                DETAILFRAGMENT_TAG)
-                        .commit();
-            }
+            LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService
+                    (Context.LAYOUT_INFLATER_SERVICE);
+            //Root View of the activity - LinearLayout in this case.
+            final ViewGroup rootView = (ViewGroup) ((ViewGroup) this
+                    .findViewById(android.R.id.content)).getChildAt(0);
+
+            //Inflate both fragments, Add them to Child Views.
+            rootView.addView(inflater.inflate(R.layout.fragment_main, null));
+          //  rootView.addView(inflater.inflate(R.layout.fragment_detail, null));
+            rootView.addView(inflater.inflate(R.layout.fragment_detail_wide, null));
+
+            //add fragment to
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.gridview_fragment_container,
+                            new MoviesFragment(),
+                            MOVIESFRAGMENT_TAG)
+                    .add(R.id.detail_fragment_container,
+                            new DetailFragment(),
+                            DETAILFRAGMENT_TAG)
+                    .commit();
+
         } else mTwoPane = false;
     }
 
@@ -46,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements MoviesFragment.Ca
     public void onItemSelected(Uri movieUri) {
         Log.d(LOG_TAG, "On main activity");
         if (mTwoPane) {
-            Log.d(LOG_TAG, "On a tablet!");
+            Log.d(LOG_TAG, "onItemSelected: On a tablet!");
             Bundle args = new Bundle();
             args.putParcelable(DetailFragment.DETAIL_URI, movieUri);
             DetailFragment fragment = new DetailFragment();
@@ -55,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements MoviesFragment.Ca
                     .replace(R.id.detail_fragment_container, fragment, DETAILFRAGMENT_TAG)
                     .commit();
         } else {
-            Log.d(LOG_TAG, "On a phone!");
+            Log.d(LOG_TAG, "onItemSelected: On a phone!");
             Intent intent = new Intent(this, DetailActivity.class)
                     .setData(movieUri);
             startActivity(intent);

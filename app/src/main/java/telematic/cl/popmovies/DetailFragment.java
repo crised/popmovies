@@ -25,8 +25,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     static final String DETAIL_URI = "URI";
 
     private static final int DETAIL_LOADER = 1;
-
-
     private Uri mUri;
 
     private TextView mTitle;
@@ -57,7 +55,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mRating = (TextView) root.findViewById(R.id.detail_rating_date);
         mImageView = (ImageView) root.findViewById(R.id.detail_view);
         mTitle = (TextView) root.findViewById(R.id.detail_title);
-       // mPlot.setText("Plot Placeholder");
+        mPlot.setText("Plot Placeholder");
         return root;
 
 
