@@ -107,6 +107,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
                              Bundle savedInstanceState) {
         mAdapter = new ImageAdapter(getContext());
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
         GridView gridview = (GridView) rootView.findViewById(R.id.gridview);
         gridview.setAdapter(mAdapter);
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -126,9 +127,8 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
             }
         });
-        return gridview;
+        return rootView;
     }
-
 
 
     @Override

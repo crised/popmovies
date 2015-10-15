@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import telematic.cl.popmovies.sync.MovieSyncAdapter;
 
@@ -15,16 +14,15 @@ public class MainActivity extends AppCompatActivity implements MoviesFragment.Ca
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
-
     private boolean mTwoPane;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         MovieSyncAdapter.initializeSyncAdapter(this);
         MovieSyncAdapter.syncImmediately(this);
+        Log.d(LOG_TAG, "onCreate");
+        setContentView(R.layout.activity_main);
         if (findViewById(R.id.detail_container) != null) {
             Log.d(LOG_TAG, "Inside a tablet!");
             mTwoPane = true;
