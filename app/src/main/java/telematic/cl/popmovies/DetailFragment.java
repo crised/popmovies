@@ -1,17 +1,20 @@
 package telematic.cl.popmovies;
 
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import static telematic.cl.popmovies.util.Consts.*;
@@ -50,13 +53,17 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         if (arguments != null) {
             mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
         }
-        View root = inflater.inflate(R.layout.fragment_detail, container, false);
-        mPlot = (TextView) root.findViewById(R.id.detail_plot);
+
+        LinearLayout ll = (LinearLayout) container;
+        ll.setBackgroundColor(Color.BLUE);
+        // View root = inflater.inflate(R.layout.fragment_detail_wide, container, false);
+        //LinearLayout root = (LinearLayout) container;
+        /*mPlot = (TextView) root.findViewById(R.id.detail_plot);
         mRating = (TextView) root.findViewById(R.id.detail_rating_date);
         mImageView = (ImageView) root.findViewById(R.id.detail_view);
-        mTitle = (TextView) root.findViewById(R.id.detail_title);
-        mPlot.setText("Plot Placeholder");
-        return root;
+        mTitle = (TextView) root.findViewById(R.id.detail_title);*/
+        // mPlot.setText("Plot Placeholder");
+        return null;
 
 
         //    Picasso.with(getContext()).load(intent.getStringExtra("uri")).into(imageView);
@@ -85,7 +92,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (!data.moveToFirst()) return;
-        mTitle.setText(data.getString(COL_TITLE));
+        //  mTitle.setText(data.getString(COL_TITLE));
     }
 
     @Override

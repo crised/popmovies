@@ -106,11 +106,14 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mAdapter = new ImageAdapter(getContext());
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+       // GridView gridView = (GridView) inflater.inflate(R.layout.fragment_main, container, false);
+        GridView gridView = (GridView) container;
 
-        GridView gridview = (GridView) rootView.findViewById(R.id.gridview);
-        gridview.setAdapter(mAdapter);
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        Log.d(LOG_TAG, "Before Set Adapter");
+        gridView.setAdapter(mAdapter);
+        Log.d(LOG_TAG, "After Set Adapter");
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 Uri movieUri = MovieContract.MovieEntry.
@@ -126,7 +129,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
                 callbackActivity.onItemSelected(movieUri);
             }
         });
-        return rootView;
+        return null;
     }
 
 

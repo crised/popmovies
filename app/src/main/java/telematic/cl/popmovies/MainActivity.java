@@ -40,9 +40,9 @@ public class MainActivity extends AppCompatActivity implements MoviesFragment.Ca
                     .findViewById(android.R.id.content)).getChildAt(0);
 
             //Inflate both fragments, Add them to Child Views.
-            rootView.addView(inflater.inflate(R.layout.fragment_main, null));
-          //  rootView.addView(inflater.inflate(R.layout.fragment_detail, null));
-            rootView.addView(inflater.inflate(R.layout.fragment_detail_wide, null));
+            rootView.addView(inflater.inflate(R.layout.fragment_main, null, false));
+            //  rootView.addView(inflater.inflate(R.layout.fragment_detail, null));
+            rootView.addView(inflater.inflate(R.layout.fragment_detail_wide, null, false));
 
             //add fragment to
             getSupportFragmentManager().beginTransaction()
