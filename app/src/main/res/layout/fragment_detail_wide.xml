@@ -2,9 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/detail_fragment_container"
     android:name="telematic.cl.popmovies.DetailFragment"
-    android:layout_width="100dp"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layout_weight="1"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -12,10 +13,10 @@
     tools:context="telematic.cl.popmovies.DetailFragment">
 
 
-    <ImageView
+   <!-- <ImageView
         android:id="@+id/detail_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" />-->
 
     <TextView
         android:id="@+id/detail_title"

@@ -54,8 +54,22 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
         }
 
-        LinearLayout ll = (LinearLayout) container;
+   //     View vll = inflater.inflate(R.layout.fragment_detail_wide, container, false);
+       /* View vll2 = inflater.inflate(R.layout.fragment_detail_wide, null, false);
+
+        LinearLayout ll = (LinearLayout) vll2;
         ll.setBackgroundColor(Color.BLUE);
+
+        ViewGroup.LayoutParams lparams = new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        TextView tv = new TextView(getActivity());
+        tv.setText("TTTTTTTTTTTEESSSSSSSST");
+        tv.setLayoutParams(lparams);
+        tv.setBackgroundColor(Color.BLACK);
+        ll.addView(tv);*/
+
+        //return ll;
+        return null;
         // View root = inflater.inflate(R.layout.fragment_detail_wide, container, false);
         //LinearLayout root = (LinearLayout) container;
         /*mPlot = (TextView) root.findViewById(R.id.detail_plot);
@@ -63,7 +77,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mImageView = (ImageView) root.findViewById(R.id.detail_view);
         mTitle = (TextView) root.findViewById(R.id.detail_title);*/
         // mPlot.setText("Plot Placeholder");
-        return null;
 
 
         //    Picasso.with(getContext()).load(intent.getStringExtra("uri")).into(imageView);
