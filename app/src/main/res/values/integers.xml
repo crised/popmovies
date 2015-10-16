@@ -1,3 +1,4 @@
 <resources>
  <integer name="columns">2</integer>
+ <integer name="column_width">185</integer>
 </resources>

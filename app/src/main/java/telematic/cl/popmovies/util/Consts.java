@@ -28,4 +28,5 @@ public final class Consts {
     public static final int COL_FAVORITE = 10;
     public static final int COL_REVIEWS = 11;
     public static final int COL_VIDEOS = 12;
+
 }

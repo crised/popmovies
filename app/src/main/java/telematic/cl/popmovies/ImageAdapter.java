@@ -27,6 +27,7 @@ public class ImageAdapter extends BaseAdapter {
     private Context mContext;
     private List<Movies.Result> movies;
 
+
     public ImageAdapter(Context c) {
         mContext = c;
         movies = new ArrayList<>();
@@ -76,10 +77,7 @@ public class ImageAdapter extends BaseAdapter {
         if (movies.size() == 20) {
 
             Log.d(LOG_TAG, "Adapter is filled with movies");
-            GridView gridView = (GridView) parent;
-            LinearLayout.LayoutParams gParams = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(
-                    185 * gridView.getNumColumns(), ViewGroup.LayoutParams.WRAP_CONTENT));
-            gridView.setLayoutParams(gParams);
+            //old code to adjust grid
 
         }
         return imageView;

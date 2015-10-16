@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import telematic.cl.popmovies.sync.MovieSyncAdapter;
@@ -43,21 +44,10 @@ public class MainActivity extends AppCompatActivity implements MoviesFragment.Ca
                     .findViewById(android.R.id.content)).getChildAt(0);
 
             //Inflate both fragments, Add them to Child Views.
+
             rootView.addView(inflater.inflate(R.layout.fragment_main, null, false));
             //  rootView.addView(inflater.inflate(R.layout.fragment_detail, null));
-            View detailView = inflater.inflate(R.layout.fragment_detail_wide, null, false);
-            detailView.setBackgroundColor(Color.RED);
-
-            rootView.addView(detailView);
-
-
-            ViewGroup.LayoutParams lparams = new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            TextView tv = new TextView(this);
-            tv.setText("TRIALSSS");
-            tv.setLayoutParams(lparams);
-            tv.setBackgroundColor(Color.MAGENTA);
-            rootView.addView(tv);
+            rootView.addView(inflater.inflate(R.layout.fragment_detail_wide, null, false));
 
 
             //add fragment to
