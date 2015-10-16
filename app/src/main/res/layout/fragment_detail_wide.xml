@@ -15,12 +15,6 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context="telematic.cl.popmovies.DetailFragment">
 
-
-        <ImageView
-            android:id="@+id/detail_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
         <TextView
             android:id="@+id/detail_title"
             style="@android:style/TextAppearance.Large"
@@ -30,12 +24,41 @@
             android:text="detail_title"
             android:textStyle="bold" />
 
+        <ImageView
+            android:id="@+id/detail_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/detail_button_favorite"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/icon_heart" />
+
+
         <TextView
             android:id="@+id/detail_plot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
             android:text="detail_plot" />
+
+        <TextView
+            android:id="@+id/detail_review_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/detail_review_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/detail_review_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
 
         <TextView
             android:id="@+id/detail_rating_date"

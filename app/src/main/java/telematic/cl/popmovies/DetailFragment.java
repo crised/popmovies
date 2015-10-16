@@ -2,6 +2,7 @@ package telematic.cl.popmovies;
 
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,15 +43,19 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     private static final int DETAIL_LOADER = 1;
     private Uri mUri;
+
     private Movies.Result mMovie;
     private List<Reviews.Result> mReviews;
     private List<Videos.Result> mVideos;
 
+    private View mRootView;
     private TextView mTitle;
     private TextView mPlot;
     private TextView mRating;
     private ImageView mImageView;
+    private Button mButtonFavorite;
 
+    private Typeface mFont;
 
     public DetailFragment() {
     }
@@ -69,26 +75,45 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
         }
 
-        View root = container;
-        root.setBackgroundColor(Color.LTGRAY);
-        mTitle = (TextView) root.findViewById(R.id.detail_title);
-        mPlot = (TextView) root.findViewById(R.id.detail_plot);
-        mRating = (TextView) root.findViewById(R.id.detail_rating_date);
-        mImageView = (ImageView) root.findViewById(R.id.detail_view);
+        mRootView = container;
+        mRootView.setBackgroundColor(Color.LTGRAY);
+        mTitle = (TextView) mRootView.findViewById(R.id.detail_title);
+        mPlot = (TextView) mRootView.findViewById(R.id.detail_plot);
+        mRating = (TextView) mRootView.findViewById(R.id.detail_rating_date);
+        mImageView = (ImageView) mRootView.findViewById(R.id.detail_view);
+        mButtonFavorite = (Button) mRootView.findViewById(R.id.detail_button_favorite);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT));
-        root.setLayoutParams(params);
+        mRootView.setLayoutParams(params);
+
+        mFont = Typeface.createFromAsset(getActivity().getAssets(),
+                "fontawesome-webfont.ttf");
+
+        setFavoriteIcon();
         return null;
 
-        //    Picasso.with(getContext()).load(intent.getStringExtra("uri")).into(imageView);
-        //    title.setText(intent.getStringExtra("title"));
-        //  plot.setText(intent.getStringExtra("plot"));
-        //rating.setText("User Rating: " + intent.getStringExtra("rating") + "   "
-        //      + "Release Date: " + intent.getStringExtra("date"));
+    }
+
+    private void setFavoriteIcon() {
+        mButtonFavorite.setTypeface(mFont);
 
     }
+
+    private void addVideoButtons() {
+
+        Button button = new Button(getActivity());
+        button.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+        button.setText(getResources().getString(R.string.icon_video));
+        button.setTypeface(mFont);
+
+        ViewGroup ll = (ViewGroup) ((ViewGroup) mRootView).getChildAt(0);
+        ll.addView(button);
+
+    }
+
 
     private void fillUI() {
         mTitle.setText(mMovie.getTitle());
@@ -96,6 +121,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         if (mReviews != null)
             if (mReviews.get(0).getContent() != null)
                 mPlot.setText(mReviews.get(0).getContent());
+            else mPlot.setText("");
+        else mPlot.setText("");
     }
 
     private void transformCursorData(Cursor data) {
@@ -157,6 +184,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         if (!data.moveToFirst()) return;
         transformCursorData(data);
         fillUI();
+        addVideoButtons();
     }
 
     @Override

@@ -19,4 +19,10 @@
     <string name="sync_account_type">popmovies.example.com</string>
     <string name="content_authority">telematic.cl.popmovies</string>
 
+    <!--FontAwesome Related-->
+    <string name="icon_heart">&#xf004;</string>
+    <string name="icon_video">&#xf008;</string>
+
+
+
 </resources>
