@@ -93,6 +93,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private void fillUI() {
         mTitle.setText(mMovie.getTitle());
         Picasso.with(getContext()).load(mMovie.getPosterUri()).into(mImageView);
+        if (mReviews != null)
+            if (mReviews.get(0).getContent() != null)
+                mPlot.setText(mReviews.get(0).getContent());
     }
 
     private void transformCursorData(Cursor data) {

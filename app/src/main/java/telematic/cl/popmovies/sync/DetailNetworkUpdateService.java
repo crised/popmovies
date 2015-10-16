@@ -49,7 +49,7 @@ public class DetailNetworkUpdateService extends IntentService {
         String col_videos = updatedCursor.getString(COL_VIDEOS);
         if (!reviews.equals(col_reviews) || !videos.equals(col_videos))
             Log.e(LOG_TAG, "Ouch...");
-      //  Log.d(LOG_TAG, updatedCursor.getString(COL_REVIEWS) + updatedCursor.getString(COL_VIDEOS));
+        //  Log.d(LOG_TAG, updatedCursor.getString(COL_REVIEWS) + updatedCursor.getString(COL_VIDEOS));
         updatedCursor.close();
     }
 
