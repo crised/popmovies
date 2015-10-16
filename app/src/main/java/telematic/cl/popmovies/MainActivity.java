@@ -2,7 +2,6 @@ package telematic.cl.popmovies;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,14 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
-import android.widget.TextView;
 
 import telematic.cl.popmovies.sync.MovieSyncAdapter;
 
-public class MainActivity extends AppCompatActivity implements MoviesFragment.Callback {
+public class MainActivity extends AppCompatActivity implements MainFragment.Callback {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
@@ -53,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements MoviesFragment.Ca
             //add fragment to
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.gridview_fragment_container,
-                            new MoviesFragment(),
+                            new MainFragment(),
                             MOVIESFRAGMENT_TAG)
                     .commit();
 

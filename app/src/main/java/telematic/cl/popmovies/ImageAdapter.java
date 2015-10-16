@@ -74,12 +74,8 @@ public class ImageAdapter extends BaseAdapter {
             Picasso.with(mContext).load(movie.getPosterUri()).into(imageView);
 
 
-        if (movies.size() == 20) {
+        //if (movies.size() == 20) Log.d(LOG_TAG, "Adapter is filled with movies");
 
-            Log.d(LOG_TAG, "Adapter is filled with movies");
-            //old code to adjust grid
-
-        }
         return imageView;
     }
 

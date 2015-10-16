@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
@@ -42,10 +41,10 @@ import static telematic.cl.popmovies.util.Consts.MOVIE_ID;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MoviesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
-    private static final String LOG_TAG = MoviesFragment.class.getSimpleName();
+    private static final String LOG_TAG = MainFragment.class.getSimpleName();
 
     private static final int MOVIES_LOADER = 0;
 
@@ -70,7 +69,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     };
 
 
-    public MoviesFragment() {
+    public MainFragment() {
     }
 
     public interface Callback {
@@ -155,7 +154,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         if (data.getCount() == 0) return;
         mCursorData = data;
         setListFromCursor();
-        Log.d(LOG_TAG, "# Movies: " + String.valueOf(mMovieList.size()));
+        //Log.d(LOG_TAG, "# Movies: " + String.valueOf(mMovieList.size()));
         mAdapter.getMovies().clear();
         mAdapter.getMovies().addAll(mMovieList);
     }

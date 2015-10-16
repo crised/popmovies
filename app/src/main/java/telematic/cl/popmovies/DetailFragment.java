@@ -57,36 +57,17 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         View root = container;
         root.setBackgroundColor(Color.LTGRAY);
         mTitle = (TextView) root.findViewById(R.id.detail_title);
-        mTitle.setText("Added in fragment!");
-
-        ViewGroup.LayoutParams lparams = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        TextView tv = new TextView(getActivity());
-        tv.setText("TEST SON!");
-
-        tv.setLayoutParams(lparams);
-        tv.setBackgroundColor(Color.YELLOW);
-        ((LinearLayout) root).addView(tv);
-
-        return null;
-        //     View vll = inflater.inflate(R.layout.fragment_detail_wide, container, false);
-       /* View vll2 = inflater.inflate(R.layout.fragment_detail_wide, null, false);
-
-        LinearLayout ll = (LinearLayout) vll2;
-        ll.setBackgroundColor(Color.BLUE);
-
-
-        /
-
-        //return ll;
-        return null;
-        // View root = inflater.inflate(R.layout.fragment_detail_wide, container, false);
-        //LinearLayout root = (LinearLayout) container;
-        /*mPlot = (TextView) root.findViewById(R.id.detail_plot);
+        mPlot = (TextView) root.findViewById(R.id.detail_plot);
         mRating = (TextView) root.findViewById(R.id.detail_rating_date);
         mImageView = (ImageView) root.findViewById(R.id.detail_view);
-        mTitle = (TextView) root.findViewById(R.id.detail_title);*/
-        // mPlot.setText("Plot Placeholder");
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT));
+        root.setLayoutParams(params);
+
+
+        return null;
 
 
         //    Picasso.with(getContext()).load(intent.getStringExtra("uri")).into(imageView);
@@ -115,7 +96,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (!data.moveToFirst()) return;
-        //  mTitle.setText(data.getString(COL_TITLE));
+        mTitle.setText(data.getString(COL_TITLE));
     }
 
     @Override

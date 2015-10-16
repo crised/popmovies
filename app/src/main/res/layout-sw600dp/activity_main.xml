@@ -6,17 +6,10 @@
     android:orientation="horizontal"
     tools:context="telematic.cl.popmovies.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="FirstSibling"
-        android:textStyle="bold" />
 
     <!--<fragment
         android:id="@+id/movies_fragment"
-        android:name="telematic.cl.popmovies.MoviesFragment"
-        android:layout_width="555px"
+        android:name="telematic.cl.popmovies.MainFragment        android:layout_width="555px"
         android:layout_height="match_parent"
         tools:layout="@android:layout/list_content" />
 
