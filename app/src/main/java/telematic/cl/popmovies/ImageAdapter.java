@@ -5,8 +5,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.squareup.picasso.Picasso;
 
@@ -43,9 +45,10 @@ public class ImageAdapter extends BaseAdapter {
         return 0;
     }
 
+
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
-     //   Log.d(LOG_TAG, "getView");
+        //   Log.d(LOG_TAG, "getView");
         //Could have Cast (GridView) in ViewGroup parent
 
         ImageView imageView;
@@ -58,8 +61,9 @@ public class ImageAdapter extends BaseAdapter {
             imageView.setAdjustViewBounds(true);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(0, 0, 0, 0);
+
         } else {
-   //         Log.d(LOG_TAG, "convertView not  null");
+            //         Log.d(LOG_TAG, "convertView not  null");
 
             imageView = (ImageView) convertView;
         }
@@ -67,6 +71,17 @@ public class ImageAdapter extends BaseAdapter {
         Movies.Result movie = movies.get(position);
         if (movie != null)
             Picasso.with(mContext).load(movie.getPosterUri()).into(imageView);
+
+
+        if (movies.size() == 20) {
+
+            Log.d(LOG_TAG, "Adapter is filled with movies");
+            GridView gridView = (GridView) parent;
+            LinearLayout.LayoutParams gParams = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(
+                    185 * gridView.getNumColumns(), ViewGroup.LayoutParams.WRAP_CONTENT));
+            gridView.setLayoutParams(gParams);
+
+        }
         return imageView;
     }
 

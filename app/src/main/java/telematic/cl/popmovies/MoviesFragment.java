@@ -120,10 +120,12 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         //Basically, you should choose the LayoutParams depending on the parent
 
         //LinearLayout.LayoutParams gParams = new LinearLayout.LayoutParams(800, 800);-> this work
+        //pixels
+        /*
         LinearLayout.LayoutParams gParams = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(
                 555, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        gridView.setLayoutParams(gParams);
+        gridView.setLayoutParams(gParams);*/
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
