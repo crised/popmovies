@@ -54,7 +54,7 @@ public class MovieServiceHelper {
             //TODO put parameter vote_average.desc
             Call<Movies> moviesCall = mMovieService.listMovies("popularity.desc", mAPI_KEY);
             Response<Movies> moviesResponse = moviesCall.execute();
-            Log.d(LOG_TAG, String.valueOf(moviesResponse.isSuccess()));
+          //  Log.d(LOG_TAG, String.valueOf(moviesResponse.isSuccess()));
             return moviesResponse.body().getResults();
         } catch (IOException e) {
             Log.e(LOG_TAG, "Can't fetch movies, IO exception");

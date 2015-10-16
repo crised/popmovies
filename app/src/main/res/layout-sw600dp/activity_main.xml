@@ -7,23 +7,4 @@
     tools:context="telematic.cl.popmovies.MainActivity">
 
 
-    <!--<fragment
-        android:id="@+id/movies_fragment"
-        android:name="telematic.cl.popmovies.MainFragment        android:layout_width="555px"
-        android:layout_height="match_parent"
-        tools:layout="@android:layout/list_content" />
-
-    <fragment
-        android:id="@+id/detail_fragment"
-        android:name="telematic.cl.popmovies.DetailFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        tools:layout="@android:layout/list_content" />-->
-
-    <!--
-    <FrameLayout
-        android:id="@+id/detail_container"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent" />-->
 </LinearLayout>

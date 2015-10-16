@@ -65,10 +65,11 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         mcVVector.toArray(cvArray);
         ///Integer deletedRowsNonFavorite;
         Integer insertedRows = getContext().getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, cvArray);
-        Log.d(LOG_TAG, "Sync Complete. " + insertedRows + " Inserted");
-        Log.d(LOG_TAG, "Total rows in DB: " + String.valueOf(
+        //   Log.d(LOG_TAG, "Sync Complete. " + insertedRows + " Inserted");
+        // Log.d(LOG_TAG, "Total rows in DB: " + String.valueOf(
+        /*
                 getContext().getContentResolver().query(
-                        MovieContract.MovieEntry.CONTENT_URI, null, null, null, null).getCount()));
+                        MovieContract.MovieEntry.CONTENT_URI, null, null, null, null).getCount()));*/
 
 
         // deletedRowsNonFavorite = getContext().getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI, sMoviesFavorites, new String[]{"0"});
