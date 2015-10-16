@@ -54,19 +54,29 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
         }
 
-   //     View vll = inflater.inflate(R.layout.fragment_detail_wide, container, false);
+        View root = container;
+        root.setBackgroundColor(Color.LTGRAY);
+        mTitle = (TextView) root.findViewById(R.id.detail_title);
+        mTitle.setText("Added in fragment!");
+
+        ViewGroup.LayoutParams lparams = new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        TextView tv = new TextView(getActivity());
+        tv.setText("TEST SON!");
+
+        tv.setLayoutParams(lparams);
+        tv.setBackgroundColor(Color.YELLOW);
+        ((LinearLayout) root).addView(tv);
+
+        return null;
+        //     View vll = inflater.inflate(R.layout.fragment_detail_wide, container, false);
        /* View vll2 = inflater.inflate(R.layout.fragment_detail_wide, null, false);
 
         LinearLayout ll = (LinearLayout) vll2;
         ll.setBackgroundColor(Color.BLUE);
 
-        ViewGroup.LayoutParams lparams = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        TextView tv = new TextView(getActivity());
-        tv.setText("TTTTTTTTTTTEESSSSSSSST");
-        tv.setLayoutParams(lparams);
-        tv.setBackgroundColor(Color.BLACK);
-        ll.addView(tv);*/
+
+        /
 
         //return ll;
         return null;
