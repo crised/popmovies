@@ -16,7 +16,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.GridLayout;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,12 +108,22 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mAdapter = new ImageAdapter(getContext());
-       // GridView gridView = (GridView) inflater.inflate(R.layout.fragment_main, container, false);
+        // GridView gridView = (GridView) inflater.inflate(R.layout.fragment_main, container, false);
+        //Maybe this can be done in the ImageAdapter
         GridView gridView = (GridView) container;
 
         Log.d(LOG_TAG, "Before Set Adapter");
         gridView.setAdapter(mAdapter);
         Log.d(LOG_TAG, "After Set Adapter");
+
+        gridView.smoothScrollToPosition(10);
+        //Basically, you should choose the LayoutParams depending on the parent
+
+        //LinearLayout.LayoutParams gParams = new LinearLayout.LayoutParams(800, 800);-> this work
+        LinearLayout.LayoutParams gParams = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(
+                555, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        gridView.setLayoutParams(gParams);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,

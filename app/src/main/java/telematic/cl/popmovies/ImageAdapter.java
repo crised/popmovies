@@ -46,6 +46,7 @@ public class ImageAdapter extends BaseAdapter {
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
      //   Log.d(LOG_TAG, "getView");
+        //Could have Cast (GridView) in ViewGroup parent
 
         ImageView imageView;
         if (convertView == null) {

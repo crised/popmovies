@@ -43,40 +43,39 @@ public class MainActivity extends AppCompatActivity implements MoviesFragment.Ca
                     .findViewById(android.R.id.content)).getChildAt(0);
 
             //Inflate both fragments, Add them to Child Views.
-           // rootView.addView(inflater.inflate(R.layout.fragment_main, null, false));
+            rootView.addView(inflater.inflate(R.layout.fragment_main, null, false));
             //  rootView.addView(inflater.inflate(R.layout.fragment_detail, null));
             View detailView = inflater.inflate(R.layout.fragment_detail_wide, null, false);
             detailView.setBackgroundColor(Color.RED);
 
-           rootView.addView(detailView);
+            rootView.addView(detailView);
 
 
             ViewGroup.LayoutParams lparams = new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             TextView tv = new TextView(this);
-            tv.setText("TTTTTTTTTTTEESSSSSSSST");
+            tv.setText("TRIALSSS");
             tv.setLayoutParams(lparams);
             tv.setBackgroundColor(Color.MAGENTA);
             rootView.addView(tv);
 
-/*
+
             //add fragment to
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.gridview_fragment_container,
                             new MoviesFragment(),
                             MOVIESFRAGMENT_TAG)
                     .commit();
-*/
 
-           getSupportFragmentManager().beginTransaction()
-                            .add(R.id.detail_fragment_container,
-                                    new DetailFragment(),
-                                    DETAILFRAGMENT_TAG)
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.detail_fragment_container,
+                            new DetailFragment(),
+                            DETAILFRAGMENT_TAG)
                     .commit();
 
         } else mTwoPane = false;
     }
-
 
 
     @Override
