@@ -1,5 +1,6 @@
 package telematic.cl.popmovies;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -33,6 +34,7 @@ import telematic.cl.popmovies.util.Reviews;
 import telematic.cl.popmovies.util.Videos;
 
 import static telematic.cl.popmovies.util.Consts.COL_DATE;
+import static telematic.cl.popmovies.util.Consts.COL_FAVORITE;
 import static telematic.cl.popmovies.util.Consts.COL_OVERVIEW;
 import static telematic.cl.popmovies.util.Consts.COL_POSTER_PATH;
 import static telematic.cl.popmovies.util.Consts.COL_REVIEWS;
@@ -40,13 +42,15 @@ import static telematic.cl.popmovies.util.Consts.COL_TITLE;
 import static telematic.cl.popmovies.util.Consts.COL_VIDEOS;
 import static telematic.cl.popmovies.util.Consts.COL_VOTE_AVG;
 
+import static telematic.cl.popmovies.data.MovieContract.MovieEntry.COLUMN_FAVORITE;
+
 /**
  * A placeholder fragment containing a simple view.
  */
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String LOG_TAG = DetailFragment.class.getSimpleName();
-    static final String DETAIL_URI = "URI";
+    static final String DETAIL_URI = "DETAIL_URI";
 
     private static final int DETAIL_LOADER = 1;
     private Uri mUri;
@@ -110,35 +114,50 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     private void setFavoriteIcon() {
         mButtonFavorite.setTypeface(mFont);
+        mButtonFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                favoriteStar();
+            }
+        });
     }
 
     private void addVideoButtons() {
-
         Button button = new Button(getActivity());
         button.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
         //  button.setId("detail_video_button_1");
         button.setText(getResources().getString(R.string.icon_video));
         button.setTypeface(mFont);
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(LOG_TAG, "hi");
-
                 if (mVideos != null) {
                     startActivity(new Intent(Intent.ACTION_VIEW,
                             Uri.parse(mVideos.get(0).getUri())));
                 }
             }
         });
-
         mll.addView(button);
+    }
 
+    private void favoriteStar() {
+        ContentValues cv = new ContentValues();
+        int toggle;
+        if (mMovie.getFavorite() == 1) toggle = 0;
+        else toggle = 1;
+        cv.put(COLUMN_FAVORITE, toggle);
+        getContext().getContentResolver().
+                update(mUri,
+                        cv,
+                        null,
+                        null);
     }
 
 
     private void fillUI() {
+        //add logic in order not to set twice values, loader get's called twice.
+        Log.d(LOG_TAG, "Loaded");
         mTitle.setText(mMovie.getTitle());
         Picasso.with(getContext()).load(mMovie.getPosterUri()).into(mImageView);
         if (mReviews != null)
@@ -156,6 +175,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mMovie.setPosterPath(data.getString(COL_POSTER_PATH));
         mMovie.setTitle(data.getString(COL_TITLE));
         mMovie.setVoteAverage(data.getDouble(COL_VOTE_AVG));
+        if (data.getInt(COL_FAVORITE) == 1) {
+            mMovie.setFavorite(1);
+            Log.d(LOG_TAG, "Movie is Favorite!");
+        } else mMovie.setFavorite(0);
 
 
         try {

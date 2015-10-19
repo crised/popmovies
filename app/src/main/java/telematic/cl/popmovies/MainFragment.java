@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import telematic.cl.popmovies.data.MovieContract;
-import telematic.cl.popmovies.sync.DetailNetworkUpdateService;
+import telematic.cl.popmovies.sync.DetailUpdateService;
 import telematic.cl.popmovies.util.Movies;
 
 import static telematic.cl.popmovies.util.Consts.COL_DATE;
@@ -38,6 +37,7 @@ import static telematic.cl.popmovies.util.Consts.COL_POSTER_PATH;
 import static telematic.cl.popmovies.util.Consts.COL_TITLE;
 import static telematic.cl.popmovies.util.Consts.COL_VOTE_AVG;
 import static telematic.cl.popmovies.util.Consts.MOVIE_ID;
+import static telematic.cl.popmovies.util.Consts.*;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -49,8 +49,12 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private static final int MOVIES_LOADER = 0;
 
+    static final String MAIN_SORT_URI = "MAIN_SORT_URI";
+
+
     private ImageAdapter mAdapter;
 
+    private int mSort; // 0 Most Popular, 1 Highest Ranked, 2 Favorites.
     private List<Movies.Result> mMovieList;
     private Cursor mCursorData;
 
@@ -80,15 +84,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onStart() {
-        syncNet();
-        super.onStart();
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -96,39 +94,26 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         super.onActivityCreated(savedInstanceState);
     }
 
-    private void syncNet() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String preference = prefs.getString(getString(R.string.settings_key),
-                getString(R.string.settings_default));
-        // new NetTask().execute(preference);
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mSort = arguments.getInt(MainFragment.MAIN_SORT_URI);
+            Log.d(LOG_TAG, String.valueOf(mSort));
+        }
+
+
         mAdapter = new ImageAdapter(getContext());
-
-        /*View ll = new LinearLayout(getContext());
-        ll.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));*/
-
-        // View testView = inflater.inflate(R.layout.test_layout, null);
-
-        // if (container == null) Log.d(LOG_TAG, "What container is null!!");
-
         GridView gridView = (GridView) inflater.inflate(R.layout.fragment_main, container, false);
-        //  View gridView = inflater.inflate(R.layout.fragment_main, container, false);
-
-
         gridView.setAdapter(mAdapter);
-
         LinearLayout.LayoutParams gParams = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(
                 this.getResources().getInteger(R.integer.columns)
                         * this.getResources().getInteger(R.integer.column_width),
                 ViewGroup.LayoutParams.WRAP_CONTENT));
         gridView.setLayoutParams(gParams);
-
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
@@ -137,7 +122,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                         buildMovieUri(mMovieList.get(position).get_id());
 
                 //Start DetailUpdateServie, no matter what.
-                Intent serviceIntent = new Intent(getContext(), DetailNetworkUpdateService.class);
+                Intent serviceIntent = new Intent(getContext(), DetailUpdateService.class);
                 serviceIntent.putExtra(MOVIE_ID, movieUri);
                 getActivity().startService(serviceIntent);
 
@@ -152,14 +137,30 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri moviesUri = MovieContract.MovieEntry.CONTENT_URI;
-        String sortOrder = MovieContract.MovieEntry._ID + " ASC";
-        return new CursorLoader(getActivity(),
-                moviesUri,
-                MOVIES_COLUMNS,
-                null,
-                null,
-                sortOrder);
+        switch (mSort) {
+            case SORT_HIGH_RATED:
+                return new CursorLoader(getActivity(),
+                        MovieContract.MovieEntry.CONTENT_URI,
+                        MOVIES_COLUMNS,
+                        null,
+                        null,
+                        MovieContract.MovieEntry.COLUMN_VOTE_AVG + " DESC");
+            case SORT_FAVORITES:
+                return new CursorLoader(getActivity(),
+                        MovieContract.MovieEntry.buildFavMovieUri(),
+                        MOVIES_COLUMNS,
+                        null,
+                        null,
+                        null);
+            default: //SORT_MOST_POPULAR
+                return new CursorLoader(getActivity(),
+                        MovieContract.MovieEntry.CONTENT_URI,
+                        MOVIES_COLUMNS,
+                        null,
+                        null,
+                        MovieContract.MovieEntry.COLUMN_POPULARITY + " ASC");
+
+        }
     }
 
     @Override

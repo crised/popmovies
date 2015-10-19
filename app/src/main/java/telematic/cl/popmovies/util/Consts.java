@@ -16,6 +16,10 @@ public final class Consts {
     public static final String MOVIE_ID = "movie_id";
     public static final String YOU_TUBE_PREPEND_URI = "https://www.youtube.com/watch?v=";
 
+    public static final int  SORT_MOST_POPULAR = 0;
+    public static final int  SORT_HIGH_RATED = 1;
+    public static final int  SORT_FAVORITES = 2;
+
 
     public static final int COL_MOVIE_ID = 0;
     public static final int COL_MOVIE_KEY = 1;

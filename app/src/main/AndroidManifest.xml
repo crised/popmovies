@@ -56,7 +56,7 @@
                 android:resource="@xml/syncadapter" />
         </service>
 
-        <service android:name=".sync.DetailNetworkUpdateService" />
+        <service android:name=".sync.DetailUpdateService" />
 
 
     </application>

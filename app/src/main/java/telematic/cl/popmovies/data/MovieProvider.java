@@ -23,7 +23,8 @@ public class MovieProvider extends ContentProvider {
     private MovieDbHelper mMovieDbHelper;
 
     static final int MOVIES = 100; //if favorites they will overlap.
-    static final int MOVIE = 101;
+    static final int MOVIES_FAV = 101; //if favorites they will overlap.
+    static final int MOVIE = 102;
 
     private static final String sMoviesFavorites =
             MovieContract.MovieEntry.TABLE_NAME + "." +
@@ -33,10 +34,6 @@ public class MovieProvider extends ContentProvider {
             MovieContract.MovieEntry.TABLE_NAME + "." +
                     MovieContract.MovieEntry._ID + " = ? ";
 
-    private static final String sMovieKeySelection =
-            MovieContract.MovieEntry.TABLE_NAME + "." +
-                    MovieContract.MovieEntry.COLUMN_MOVIE_KEY + " = ? ";
-
     static {
         sMovieQueryBuilder.setTables(MovieContract.MovieEntry.TABLE_NAME);
     }
@@ -45,6 +42,7 @@ public class MovieProvider extends ContentProvider {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = MovieContract.CONTENT_AUTHORITY;
         matcher.addURI(authority, MovieContract.PATH, MOVIES);
+        matcher.addURI(authority, MovieContract.PATH_FAV, MOVIES_FAV);
         matcher.addURI(authority, MovieContract.PATH + "/#", MOVIE);
         return matcher;
     }
@@ -62,7 +60,10 @@ public class MovieProvider extends ContentProvider {
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
             case MOVIES:
-                retCursor = getMovies(uri, projection, selection, selectionArgs, sortOrder);
+                retCursor = getMovies(projection, selection, selectionArgs, sortOrder);
+                break;
+            case MOVIES_FAV:
+                retCursor = getFavorites();
                 break;
             case MOVIE:
                 retCursor = getMovie(uri, projection, sortOrder);
@@ -133,7 +134,6 @@ public class MovieProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mMovieDbHelper.getWritableDatabase();
         int rowsUpdated;
-
         long _id = ContentUris.parseId(uri);
         switch (sUriMatcher.match(uri)) {
             case MOVIE:
@@ -151,7 +151,19 @@ public class MovieProvider extends ContentProvider {
         return rowsUpdated;
     }
 
-    private Cursor getMovies(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    private Cursor getFavorites() {
+        return sMovieQueryBuilder.query(mMovieDbHelper.getReadableDatabase(),
+                null,
+                sMoviesFavorites,
+                new String[]{"1"},
+                null,
+                null,
+                null);
+
+
+    }
+
+    private Cursor getMovies(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         if (selection != null && selectionArgs != null) //favorites
             return sMovieQueryBuilder.query(mMovieDbHelper.getReadableDatabase(),
                     projection,

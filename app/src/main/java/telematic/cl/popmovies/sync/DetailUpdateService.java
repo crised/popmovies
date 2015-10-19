@@ -15,12 +15,12 @@ import static telematic.cl.popmovies.data.MovieContract.MovieEntry.*;
 /**
  * Created by crised on 08-10-15.
  */
-public class DetailNetworkUpdateService extends IntentService {
+public class DetailUpdateService extends IntentService {
 
-    public final String LOG_TAG = DetailNetworkUpdateService.class.getSimpleName();
+    public final String LOG_TAG = DetailUpdateService.class.getSimpleName();
 
-    public DetailNetworkUpdateService() {
-        super("DetailNetworkUpdateService");
+    public DetailUpdateService() {
+        super("DetailUpdateService");
     }
 
     //uri of selected movie
@@ -35,6 +35,7 @@ public class DetailNetworkUpdateService extends IntentService {
         cursor.close();
         if (movieKey == 0) return;
         MovieServiceHelper serviceHelper = new MovieServiceHelper(this);
+        //2 Http calls
         String reviews = serviceHelper.fetchReviews(movieKey);
         String videos = serviceHelper.fetchVideos(movieKey);
         ContentValues updatedValues = new ContentValues();

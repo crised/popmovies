@@ -10,13 +10,10 @@ import android.provider.BaseColumns;
  */
 public class MovieContract {
 
-    //content://authority/path/id
-    //Parent: content://telematic.cl.popmovies/movies
-    //MovieOld: content://telematic.cl.popmovies/movies/12
-
     public static final String CONTENT_AUTHORITY = "telematic.cl.popmovies";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     public static final String PATH = "movies";
+    public static final String PATH_FAV = "fav"; //not so correct syntax
 
     public static final class MovieEntry implements BaseColumns {
 
@@ -31,7 +28,6 @@ public class MovieContract {
 
         public static final String TABLE_NAME = "movie";
 
-        //_ID
         public static final String COLUMN_MOVIE_KEY = "movie_id";
         public static final String COLUMN_LANGUAGE = "language";
         public static final String COLUMN_OVERVIEW = "overview";
@@ -47,6 +43,10 @@ public class MovieContract {
 
         public static Uri buildMovieUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static Uri buildFavMovieUri() {
+            return BASE_CONTENT_URI.buildUpon().appendPath(PATH_FAV).build();
         }
 
 

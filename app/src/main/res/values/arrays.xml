@@ -3,9 +3,11 @@
     <string-array name="settings_labels">
         <item>@string/pref_popular_label</item>
         <item>@string/pref_rating_label</item>
+        <item>@string/pref_favorite_label</item>
     </string-array>
     <string-array name="settings_values">
         <item>@string/pref_popular_value</item>
         <item>@string/pref_rating_value</item>
+        <item>@string/pref_favorite_value</item>
     </string-array>
 </resources>

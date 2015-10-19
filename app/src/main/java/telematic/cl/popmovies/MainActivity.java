@@ -1,8 +1,11 @@
 package telematic.cl.popmovies;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -13,8 +16,8 @@ import telematic.cl.popmovies.sync.MovieSyncAdapter;
 public class MainActivity extends AppCompatActivity implements MainFragment.Callback {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private static final String DETAILFRAGMENT_TAG = "DFTAG";
-    private static final String MOVIESFRAGMENT_TAG = "MFTAG";
+    private static final String DETAIL_FRAGMENT_TAG = "DFTAG";
+    private static final String MOVIES_FRAGMENT_TAG = "MFTAG";
     private boolean mTwoPane;
 
 
@@ -22,36 +25,18 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MovieSyncAdapter.initializeSyncAdapter(this);
-        MovieSyncAdapter.syncImmediately(this);
-        Log.d(LOG_TAG, "onCreate, before setContentView");
+        if (savedInstanceState == null)
+            MovieSyncAdapter.syncImmediately(this); //Avoid SyncAdapter initialize twice on orientation change
         setContentView(R.layout.activity_main);// The resource will be inflated, adding all top-level views to the activity.
-        Log.d(LOG_TAG, "onCreate, after setContentView");
         if (findViewById(R.id.sw600dp) != null) {
             Log.d(LOG_TAG, "Inside a tablet!");
             mTwoPane = true;
-            //We have only one activity, we needs to inflate fragment.
-          /*  LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService
-                    (Context.LAYOUT_INFLATER_SERVICE);
-            //Root View of the activity - LinearLayout in this case.
-            final ViewGroup rootView = (ViewGroup) ((ViewGroup) this
-                    .findViewById(android.R.id.content)).getChildAt(0);
-
-            //Inflate both fragments, Add them to Child Views.
-            rootView.addView(inflater.inflate(R.layout.fragment_main, null, false));
-            //  rootView.addView(inflater.inflate(R.layout.fragment_detail, null));
-            rootView.addView(inflater.inflate(R.layout.fragment_detail_wide, null, false));*/
-
-            //add fragment to
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.main_fragment_container,
-                            new MainFragment(),
-                            MOVIESFRAGMENT_TAG)
-                /*   .replace(R.id.detail_fragment_container,
-                            new DetailFragment(),
-                            DETAILFRAGMENT_TAG)*/.commit();
-
+                            fragmentUponSettings(),
+                            MOVIES_FRAGMENT_TAG)
+                    .commit();
         } else mTwoPane = false;
-
     }
 
 
@@ -65,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(args);
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.detail_fragment_container, fragment, DETAILFRAGMENT_TAG)
+                    .replace(R.id.detail_fragment_container, fragment, DETAIL_FRAGMENT_TAG)
                     .commit();
         } else {
             Log.d(LOG_TAG, "onItemSelected: On a phone!");
@@ -97,4 +82,29 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private Fragment fragmentUponSettings() {
+        Fragment mainFragment = new MainFragment();
+        Bundle args = new Bundle();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String preference = prefs.getString(getString(R.string.settings_key),
+                getString(R.string.settings_default));
+        args.putInt(MainFragment.MAIN_SORT_URI, Integer.valueOf(preference));
+        mainFragment.setArguments(args);
+        return mainFragment;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_fragment_container,
+                        fragmentUponSettings(),
+                        MOVIES_FRAGMENT_TAG)
+                .commit();
+
+    }
+
+
 }
