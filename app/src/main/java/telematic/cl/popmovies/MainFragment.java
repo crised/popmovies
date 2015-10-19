@@ -174,6 +174,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+        mAdapter.getMovies().clear();
         loader = null;
     }
 

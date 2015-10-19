@@ -54,7 +54,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private List<Reviews.Result> mReviews;
     private List<Videos.Result> mVideos;
 
-    private View mRootView;
+    private View mll;
     private TextView mTitle;
     private TextView mPlot;
     private TextView mRating;
@@ -81,27 +81,29 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
         }
 
-        mRootView = inflater.inflate(R.layout.fragment_detail_wide, container, false);
+        View scrollView = inflater.inflate(R.layout.fragment_detail_wide,
+                container, false);
 
-        /*
-        mRootView.setBackgroundColor(Color.LTGRAY);
-        mTitle = (TextView) mRootView.findViewById(R.id.detail_title);
-        mPlot = (TextView) mRootView.findViewById(R.id.detail_plot);
-        mRating = (TextView) mRootView.findViewById(R.id.detail_rating_date);
-        mImageView = (ImageView) mRootView.findViewById(R.id.detail_view);
-        mButtonFavorite = (Button) mRootView.findViewById(R.id.detail_button_favorite);
+        mll = scrollView.findViewById(R.id.detail_ll);
+        mll.setBackgroundColor(Color.LTGRAY);
+
+        mTitle = (TextView) mll.findViewById(R.id.detail_title);
+        mPlot = (TextView) mll.findViewById(R.id.detail_plot);
+        mRating = (TextView) mll.findViewById(R.id.detail_rating_date);
+        mImageView = (ImageView) mll.findViewById(R.id.detail_view);
+   //     mButtonFavorite = (Button) mll.findViewById(R.id.detail_button_favorite);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT));
-        mRootView.setLayoutParams(params);
+        scrollView.setLayoutParams(params);
 
         mFont = Typeface.createFromAsset(getActivity().getAssets(),
                 "fontawesome-webfont.ttf");
 
-        setFavoriteIcon();*/
+       // setFavoriteIcon();
 
-        return mRootView;
+        return scrollView;
 
     }
 
@@ -119,8 +121,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         button.setText(getResources().getString(R.string.icon_video));
         button.setTypeface(mFont);
 
-        ViewGroup ll = (ViewGroup) ((ViewGroup) mRootView).getChildAt(0);
-        ll.addView(button);
+        //ViewGroup ll = (ViewGroup) ((ViewGroup) mll).getChildAt(0);
+        //ll.addView(button);
 
     }
 

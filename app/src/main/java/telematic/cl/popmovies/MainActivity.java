@@ -42,20 +42,16 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
             rootView.addView(inflater.inflate(R.layout.fragment_detail_wide, null, false));*/
 
             //add fragment to
-            if(savedInstanceState==null){
-                 getSupportFragmentManager().beginTransaction()
-                       .add(R.id.main_fragment_container,
-                                new MainFragment(),
-                                MOVIESFRAGMENT_TAG)
-                /*        .add(R.id.detail_fragment_container_temp,
-                                new DetailFragment(),
-                                DETAILFRAGMENT_TAG)*/
-                        .commit();
-
-            }
-
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.main_fragment_container,
+                            new MainFragment(),
+                            MOVIESFRAGMENT_TAG)
+                   /*.add(R.id.detail_fragment_container,
+                            new DetailFragment(),
+                            DETAILFRAGMENT_TAG)*/.commit();
 
         } else mTwoPane = false;
+
     }
 
 
@@ -68,9 +64,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
             args.putParcelable(DetailFragment.DETAIL_URI, movieUri);
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(args);
-           /* getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.detail_fragment_container_temp, fragment, DETAILFRAGMENT_TAG)
-                    .commit();*/
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detail_fragment_container, fragment, DETAILFRAGMENT_TAG)
+                    .commit();
         } else {
             Log.d(LOG_TAG, "onItemSelected: On a phone!");
             Intent intent = new Intent(this, DetailActivity.class)
