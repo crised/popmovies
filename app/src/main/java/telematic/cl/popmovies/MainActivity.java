@@ -43,10 +43,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
 
             //add fragment to
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.main_fragment_container,
+                    .replace(R.id.main_fragment_container,
                             new MainFragment(),
                             MOVIESFRAGMENT_TAG)
-                   /*.add(R.id.detail_fragment_container,
+                /*   .replace(R.id.detail_fragment_container,
                             new DetailFragment(),
                             DETAILFRAGMENT_TAG)*/.commit();
 

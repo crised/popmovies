@@ -14,7 +14,7 @@
 
 
 
-    <fragment
+    <ScrollView
         android:id="@+id/detail_fragment_container"
         android:name="telematic.cl.popmovies.DetailFragment"
         android:layout_width="match_parent"

@@ -81,10 +81,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
         }
 
-        View scrollView = inflater.inflate(R.layout.fragment_detail_wide,
+        mll = inflater.inflate(R.layout.fragment_detail_wide,
                 container, false);
 
-        mll = scrollView.findViewById(R.id.detail_ll);
         mll.setBackgroundColor(Color.LTGRAY);
 
         mTitle = (TextView) mll.findViewById(R.id.detail_title);
@@ -96,14 +95,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT));
-        scrollView.setLayoutParams(params);
+        mll.setLayoutParams(params);
 
         mFont = Typeface.createFromAsset(getActivity().getAssets(),
                 "fontawesome-webfont.ttf");
 
        // setFavoriteIcon();
 
-        return scrollView;
+        return mll;
 
     }
 
