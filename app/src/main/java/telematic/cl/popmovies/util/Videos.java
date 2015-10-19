@@ -27,6 +27,10 @@ public class Videos {
         private String type;
         private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+        public String getUri() {
+            return Consts.YOU_TUBE_PREPEND_URI + key;
+        }
+
 
         public String getId() {
             return id;

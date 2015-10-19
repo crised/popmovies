@@ -1,5 +1,6 @@
 package telematic.cl.popmovies;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -54,7 +55,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private List<Reviews.Result> mReviews;
     private List<Videos.Result> mVideos;
 
-    private View mll;
+    private LinearLayout mll;
     private TextView mTitle;
     private TextView mPlot;
     private TextView mRating;
@@ -81,7 +82,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
         }
 
-        mll = inflater.inflate(R.layout.fragment_detail_wide,
+        mll = (LinearLayout) inflater.inflate(R.layout.fragment_detail_wide,
                 container, false);
 
         mll.setBackgroundColor(Color.LTGRAY);
@@ -90,7 +91,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mPlot = (TextView) mll.findViewById(R.id.detail_plot);
         mRating = (TextView) mll.findViewById(R.id.detail_rating_date);
         mImageView = (ImageView) mll.findViewById(R.id.detail_view);
-   //     mButtonFavorite = (Button) mll.findViewById(R.id.detail_button_favorite);
+        mButtonFavorite = (Button) mll.findViewById(R.id.detail_button_favorite);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -100,7 +101,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mFont = Typeface.createFromAsset(getActivity().getAssets(),
                 "fontawesome-webfont.ttf");
 
-       // setFavoriteIcon();
+        setFavoriteIcon();
+        addVideoButtons();
 
         return mll;
 
@@ -108,7 +110,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     private void setFavoriteIcon() {
         mButtonFavorite.setTypeface(mFont);
-
     }
 
     private void addVideoButtons() {
@@ -116,12 +117,23 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Button button = new Button(getActivity());
         button.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
-        //button.setId();
+        //  button.setId("detail_video_button_1");
         button.setText(getResources().getString(R.string.icon_video));
         button.setTypeface(mFont);
 
-        //ViewGroup ll = (ViewGroup) ((ViewGroup) mll).getChildAt(0);
-        //ll.addView(button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(LOG_TAG, "hi");
+
+                if (mVideos != null) {
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse(mVideos.get(0).getUri())));
+                }
+            }
+        });
+
+        mll.addView(button);
 
     }
 
@@ -153,7 +165,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             if (reviewJson != null) {
                 if (reviewJson.length() > 3)
                     mReviews = new Gson().fromJson(reviewJson, listType);
-            } else Log.d(LOG_TAG, "No Reviews!");
+            } else mReviews = null;
 
         } catch (JsonParseException e) {
             Log.e(LOG_TAG, "Parse Exception");
@@ -161,12 +173,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         try {
             String videosJson = data.getString(COL_VIDEOS);
-            Type listType = new TypeToken<ArrayList<Reviews.Result>>() {
+            Type listType = new TypeToken<ArrayList<Videos.Result>>() {
             }.getType();
             if (videosJson != null) {
                 if (videosJson.length() > 3)
                     mVideos = new Gson().fromJson(videosJson, listType);
-            } else Log.d(LOG_TAG, "No Videos!");
+            } else mVideos = null;
 
         } catch (JsonParseException e) {
             Log.e(LOG_TAG, "Parse Exception");

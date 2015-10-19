@@ -14,6 +14,8 @@ public final class Consts {
     public static final String BASE_POSTER_URL = "http://image.tmdb.org/t/p";
     public static final String IMAGE_WIDTH = "w185";
     public static final String MOVIE_ID = "movie_id";
+    public static final String YOU_TUBE_PREPEND_URI = "https://www.youtube.com/watch?v=";
+
 
     public static final int COL_MOVIE_ID = 0;
     public static final int COL_MOVIE_KEY = 1;
