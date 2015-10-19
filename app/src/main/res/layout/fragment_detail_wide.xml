@@ -1,6 +1,4 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/detail_fragment_container"
-    android:name="telematic.cl.popmovies.DetailFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -66,7 +64,5 @@
             android:layout_height="wrap_content"
             android:text="rating_date"
             android:textStyle="bold" />
-
-
     </LinearLayout>
 </ScrollView>

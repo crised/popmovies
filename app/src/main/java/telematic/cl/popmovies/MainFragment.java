@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
@@ -108,12 +109,24 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                              Bundle savedInstanceState) {
         mAdapter = new ImageAdapter(getContext());
 
-        GridView gridView = (GridView) container;
+        /*View ll = new LinearLayout(getContext());
+        ll.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));*/
+
+        // View testView = inflater.inflate(R.layout.test_layout, null);
+
+        // if (container == null) Log.d(LOG_TAG, "What container is null!!");
+
+        GridView gridView = (GridView) inflater.inflate(R.layout.fragment_main, container, false);
+        //  View gridView = inflater.inflate(R.layout.fragment_main, container, false);
+
 
         gridView.setAdapter(mAdapter);
 
         LinearLayout.LayoutParams gParams = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(
-                this.getResources().getInteger(R.integer.columns) * this.getResources().getInteger(R.integer.column_width), ViewGroup.LayoutParams.WRAP_CONTENT));
+                this.getResources().getInteger(R.integer.columns)
+                        * this.getResources().getInteger(R.integer.column_width),
+                ViewGroup.LayoutParams.WRAP_CONTENT));
         gridView.setLayoutParams(gParams);
 
 
@@ -133,7 +146,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 callbackActivity.onItemSelected(movieUri);
             }
         });
-        return null;
+        return gridView;
     }
 
 

@@ -1,15 +1,12 @@
 package telematic.cl.popmovies;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 
 import telematic.cl.popmovies.sync.MovieSyncAdapter;
 
@@ -27,13 +24,13 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
         MovieSyncAdapter.initializeSyncAdapter(this);
         MovieSyncAdapter.syncImmediately(this);
         Log.d(LOG_TAG, "onCreate, before setContentView");
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);// The resource will be inflated, adding all top-level views to the activity.
         Log.d(LOG_TAG, "onCreate, after setContentView");
         if (findViewById(R.id.sw600dp) != null) {
             Log.d(LOG_TAG, "Inside a tablet!");
             mTwoPane = true;
             //We have only one activity, we needs to inflate fragment.
-            LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService
+          /*  LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService
                     (Context.LAYOUT_INFLATER_SERVICE);
             //Root View of the activity - LinearLayout in this case.
             final ViewGroup rootView = (ViewGroup) ((ViewGroup) this
@@ -42,17 +39,20 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
             //Inflate both fragments, Add them to Child Views.
             rootView.addView(inflater.inflate(R.layout.fragment_main, null, false));
             //  rootView.addView(inflater.inflate(R.layout.fragment_detail, null));
-            rootView.addView(inflater.inflate(R.layout.fragment_detail_wide, null, false));
+            rootView.addView(inflater.inflate(R.layout.fragment_detail_wide, null, false));*/
 
             //add fragment to
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.gridview_fragment_container,
-                            new MainFragment(),
-                            MOVIESFRAGMENT_TAG)
-                    .add(R.id.detail_fragment_container,
-                            new DetailFragment(),
-                            DETAILFRAGMENT_TAG)
-                    .commit();
+            if(savedInstanceState==null){
+                 getSupportFragmentManager().beginTransaction()
+                       .add(R.id.main_fragment_container,
+                                new MainFragment(),
+                                MOVIESFRAGMENT_TAG)
+                /*        .add(R.id.detail_fragment_container_temp,
+                                new DetailFragment(),
+                                DETAILFRAGMENT_TAG)*/
+                        .commit();
+
+            }
 
 
         } else mTwoPane = false;
@@ -68,9 +68,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
             args.putParcelable(DetailFragment.DETAIL_URI, movieUri);
             DetailFragment fragment = new DetailFragment();
             fragment.setArguments(args);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.detail_fragment_container, fragment, DETAILFRAGMENT_TAG)
-                    .commit();
+           /* getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detail_fragment_container_temp, fragment, DETAILFRAGMENT_TAG)
+                    .commit();*/
         } else {
             Log.d(LOG_TAG, "onItemSelected: On a phone!");
             Intent intent = new Intent(this, DetailActivity.class)

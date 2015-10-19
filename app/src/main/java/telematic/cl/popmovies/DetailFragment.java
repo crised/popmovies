@@ -31,7 +31,13 @@ import telematic.cl.popmovies.util.Movies;
 import telematic.cl.popmovies.util.Reviews;
 import telematic.cl.popmovies.util.Videos;
 
-import static telematic.cl.popmovies.util.Consts.*;
+import static telematic.cl.popmovies.util.Consts.COL_DATE;
+import static telematic.cl.popmovies.util.Consts.COL_OVERVIEW;
+import static telematic.cl.popmovies.util.Consts.COL_POSTER_PATH;
+import static telematic.cl.popmovies.util.Consts.COL_REVIEWS;
+import static telematic.cl.popmovies.util.Consts.COL_TITLE;
+import static telematic.cl.popmovies.util.Consts.COL_VIDEOS;
+import static telematic.cl.popmovies.util.Consts.COL_VOTE_AVG;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -75,7 +81,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
         }
 
-        mRootView = container;
+        mRootView = inflater.inflate(R.layout.fragment_detail_wide, container, false);
+
+        /*
         mRootView.setBackgroundColor(Color.LTGRAY);
         mTitle = (TextView) mRootView.findViewById(R.id.detail_title);
         mPlot = (TextView) mRootView.findViewById(R.id.detail_plot);
@@ -91,8 +99,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mFont = Typeface.createFromAsset(getActivity().getAssets(),
                 "fontawesome-webfont.ttf");
 
-        setFavoriteIcon();
-        return null;
+        setFavoriteIcon();*/
+
+        return mRootView;
 
     }
 
@@ -106,6 +115,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Button button = new Button(getActivity());
         button.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
+        //button.setId();
         button.setText(getResources().getString(R.string.icon_video));
         button.setTypeface(mFont);
 
@@ -184,7 +194,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         if (!data.moveToFirst()) return;
         transformCursorData(data);
         fillUI();
-        addVideoButtons();
     }
 
     @Override
