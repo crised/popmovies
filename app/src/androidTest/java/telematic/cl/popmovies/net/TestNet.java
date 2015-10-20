@@ -52,7 +52,7 @@ public class TestNet extends AndroidTestCase {
 
         deleteAllRecordsFromProvider();
 
-        mMovies = new MovieServiceHelper(mContext).fetchMovies();
+        mMovies = new MovieServiceHelper(mContext).fetchMoviesPopAndVote();
         if (mMovies == null) return; // no net
         fillCVVector();
         if (mcVVector.size() == 0) return;

@@ -103,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
                         fragmentUponSettings(),
                         MOVIES_FRAGMENT_TAG)
                 .commit();
-
     }
 
 

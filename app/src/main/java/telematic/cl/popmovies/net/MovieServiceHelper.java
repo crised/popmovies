@@ -49,13 +49,15 @@ public class MovieServiceHelper {
     }
 
     // All of the below should be persisted(inserted/updated), into db.
-    public List<Movies.Result> fetchMovies() {
+    public List<Movies.Result> fetchMoviesPopAndVote() {
         try {
-            //TODO put parameter vote_average.desc
-            Call<Movies> moviesCall = mMovieService.listMovies("popularity.desc", mAPI_KEY);
-            Response<Movies> moviesResponse = moviesCall.execute();
-            //  Log.d(LOG_TAG, String.valueOf(moviesResponse.isSuccess()));
-            return moviesResponse.body().getResults();
+            Call<Movies> moviesCallPopularity = mMovieService.listMovies("popularity.desc", mAPI_KEY);
+            Call<Movies> moviesCallVote = mMovieService.listMovies("vote_average.desc", mAPI_KEY);
+            Response<Movies> moviesPopularityResponse = moviesCallPopularity.execute();
+            Response<Movies> moviesVoteResponse = moviesCallVote.execute();
+            List<Movies.Result> movies = moviesPopularityResponse.body().getResults();
+            movies.addAll(moviesVoteResponse.body().getResults());
+            return movies;
         } catch (IOException e) {
             Log.e(LOG_TAG, "Can't fetch movies, IO exception");
             return null;

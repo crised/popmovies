@@ -69,6 +69,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private Typeface mFont;
 
     public DetailFragment() {
+        setHasOptionsMenu(true);
     }
 
     @Override

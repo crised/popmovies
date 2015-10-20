@@ -50,7 +50,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         Log.d(LOG_TAG, "Total rows in DB: " + String.valueOf(
                 getContext().getContentResolver().query(
                         MovieContract.MovieEntry.CONTENT_URI, null, null, null, null).getCount()));
-        mMovies = new MovieServiceHelper(mContext).fetchMovies();
+        mMovies = new MovieServiceHelper(mContext).fetchMoviesPopAndVote();
         if (mMovies == null) return; // no net
         fillCVVector();
         if (mcVVector.size() == 0) return;

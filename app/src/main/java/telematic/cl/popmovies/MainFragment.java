@@ -138,7 +138,16 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (mSort) {
+            case SORT_MOST_POPULAR:
+                Log.d(LOG_TAG, "Loading Most Popular");
+                return new CursorLoader(getActivity(),
+                        MovieContract.MovieEntry.CONTENT_URI,
+                        MOVIES_COLUMNS,
+                        null,
+                        null,
+                        MovieContract.MovieEntry.COLUMN_POPULARITY + " DESC");
             case SORT_HIGH_RATED:
+                Log.d(LOG_TAG, "Loading Highest Rating");
                 return new CursorLoader(getActivity(),
                         MovieContract.MovieEntry.CONTENT_URI,
                         MOVIES_COLUMNS,
@@ -152,13 +161,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                         null,
                         null,
                         null);
-            default: //SORT_MOST_POPULAR
-                return new CursorLoader(getActivity(),
-                        MovieContract.MovieEntry.CONTENT_URI,
-                        MOVIES_COLUMNS,
-                        null,
-                        null,
-                        MovieContract.MovieEntry.COLUMN_POPULARITY + " ASC");
+            default:
+                Log.e(LOG_TAG, "Need criteria to load");
+                return null;
 
         }
     }
@@ -168,9 +173,11 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         if (data.getCount() == 0) return;
         mCursorData = data;
         setListFromCursor();
-        //Log.d(LOG_TAG, "# Movies: " + String.valueOf(mMovieList.size()));
+        Log.d(LOG_TAG, "# Movies: " + String.valueOf(mMovieList.size()));
         mAdapter.getMovies().clear();
+        mAdapter.notifyDataSetChanged();
         mAdapter.getMovies().addAll(mMovieList);
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override

@@ -164,14 +164,6 @@ public class MovieProvider extends ContentProvider {
     }
 
     private Cursor getMovies(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        if (selection != null && selectionArgs != null) //favorites
-            return sMovieQueryBuilder.query(mMovieDbHelper.getReadableDatabase(),
-                    projection,
-                    sMoviesFavorites,
-                    new String[]{"1"},
-                    null,
-                    null,
-                    sortOrder);
         return sMovieQueryBuilder.query(mMovieDbHelper.getReadableDatabase(),
                 projection,
                 selection,

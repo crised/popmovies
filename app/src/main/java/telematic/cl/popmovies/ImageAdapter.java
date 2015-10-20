@@ -33,6 +33,8 @@ public class ImageAdapter extends BaseAdapter {
         movies = new ArrayList<>();
     }
 
+
+
     public int getCount() {
         //Log.d(LOG_TAG, "getCount: " + movies.size());
         return movies.size();
@@ -64,7 +66,6 @@ public class ImageAdapter extends BaseAdapter {
             imageView.setPadding(0, 0, 0, 0);
 
         } else {
-            //         Log.d(LOG_TAG, "convertView not  null");
 
             imageView = (ImageView) convertView;
         }
@@ -74,7 +75,6 @@ public class ImageAdapter extends BaseAdapter {
             Picasso.with(mContext).load(movie.getPosterUri()).into(imageView);
 
 
-        //if (movies.size() == 20) Log.d(LOG_TAG, "Adapter is filled with movies");
 
         return imageView;
     }
