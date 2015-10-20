@@ -3,7 +3,6 @@ package telematic.cl.popmovies;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -68,10 +67,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     private LinearLayout mll;
     private TextView mTitle;
-    private TextView mPlot;
-    private TextView mRating;
     private ImageView mImageView;
+    private TextView mDate;
+    private TextView mVote;
     private Button mButtonFavorite;
+    private TextView mPlot;
+    private LinearLayout mTrailersll;
+    private LinearLayout mReviewsll;
+
 
     private Typeface mFont;
 
@@ -89,24 +92,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     }
 
-    private Intent createShareIntent() {
-        Log.d(LOG_TAG, "Intent Method!");
-
-        if (mVideos == null || mVideos.isEmpty()) return null;
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        shareIntent.setType("text/plain");
-        if (mVideos.get(0).getUri() != null) {
-            Log.d(LOG_TAG, "Intent Created!");
-            shareIntent.putExtra(Intent.EXTRA_TEXT,
-                    "See this great Movie! " +
-                            mVideos.get(0).getUri());
-
-
-        }
-        return shareIntent;
-
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -125,12 +110,15 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         mll = (LinearLayout) inflater.inflate(R.layout.fragment_detail_wide,
                 container, false);
-        //mll.setBackgroundColor(Color.LTGRAY);
         mTitle = (TextView) mll.findViewById(R.id.detail_title);
-        mPlot = (TextView) mll.findViewById(R.id.detail_plot);
-        mRating = (TextView) mll.findViewById(R.id.detail_rating_date);
         mImageView = (ImageView) mll.findViewById(R.id.detail_view);
+        mDate = (TextView) mll.findViewById(R.id.detail_date);
+        mVote = (TextView) mll.findViewById(R.id.detail_vote);
+        mPlot = (TextView) mll.findViewById(R.id.detail_plot);
         mButtonFavorite = (Button) mll.findViewById(R.id.detail_button_favorite);
+
+        mTrailersll = (LinearLayout) mll.findViewById(R.id.detail_trailers_ll);
+        mReviewsll = (LinearLayout) mll.findViewById(R.id.detail_reviews_ll);
 
 
         mFont = Typeface.createFromAsset(getActivity().getAssets(),
@@ -155,22 +143,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     private void addVideoButtons() {
-        Button button = new Button(getActivity());
-        button.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
-        //  button.setId("detail_video_button_1");
-        button.setText(getResources().getString(R.string.icon_video));
-        button.setTypeface(mFont);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mVideos != null) {
-                    startActivity(new Intent(Intent.ACTION_VIEW,
-                            Uri.parse(mVideos.get(0).getUri())));
-                }
-            }
-        });
-        mll.addView(button);
+
     }
 
     private void favoriteStar() {
@@ -184,20 +157,58 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                         cv,
                         null,
                         null);
+        //Toast could be added here.
     }
 
 
     private void fillUI() {
         //add logic in order not to set twice values, loader get's called twice.
-        Log.d(LOG_TAG, "Loaded");
-        mTitle.setText(mMovie.getTitle());
         Picasso.with(getContext()).load(mMovie.getPosterUri()).into(mImageView);
+        mTitle.setText(mMovie.getTitle());
+        mDate.setText(mMovie.getReleaseDate().trim().substring(0, 4));
+        if (mMovie.getVoteAverage() != null)
+            mVote.setText(String.valueOf(mMovie.getVoteAverage()) + "/10");
+        mPlot.setText(mMovie.getOverview());
 
-        if (mReviews != null)
-            if (mReviews.get(0).getContent() != null)
-                mPlot.setText(mReviews.get(0).getContent());
-            else mPlot.setText("");
-        else mPlot.setText("");
+        if (!(mReviews == null || mReviews.isEmpty())) {
+            for (Reviews.Result review : mReviews) {
+                TextView textView =
+                        new TextView(getContext());
+                textView.setLayoutParams(new
+                        LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                textView.setText(getResources().getString(R.string.icon_video)
+                        + "\n" + review.getContent());
+                textView.setTypeface(mFont);
+                textView.setPadding(2, 2, 2, 2);
+                //textView.setTextAppearance(R.s);
+                mReviewsll.addView(textView);
+
+            }
+        }
+
+        if (!(mVideos == null || mVideos.isEmpty())) {
+            for (final Videos.Result video : mVideos) {
+                Button button = new Button(getActivity());
+                button.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                button.setText(getResources().getString(R.string.icon_youtube));
+                button.setTypeface(mFont);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mVideos != null) {
+                            startActivity(new Intent(Intent.ACTION_VIEW,
+                                    Uri.parse(video.getUri())));
+                        }
+                    }
+                });
+                button.setPadding(2, 2, 2, 2);
+                mTrailersll.addView(button);
+            }
+        }
+
+
     }
 
     private void transformCursorData(Cursor data) {
@@ -241,6 +252,19 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         }
 
 
+    }
+
+    private Intent createShareIntent() {
+        if (mVideos == null || mVideos.isEmpty()) return null;
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType("text/plain");
+        if (mVideos.get(0).getUri() != null) {
+            shareIntent.putExtra(Intent.EXTRA_TEXT,
+                    "See this great Movie! " +
+                            mVideos.get(0).getUri());
+        }
+        return shareIntent;
     }
 
     @Override

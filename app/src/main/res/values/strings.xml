@@ -31,4 +31,5 @@
     <!--FontAwesome Related-->
     <string name="icon_heart">&#xf004;</string>
     <string name="icon_video">&#xf008;</string>
+    <string name="icon_youtube">&#xf16a;</string>
 </resources>
