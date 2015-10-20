@@ -125,20 +125,17 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         mll = (LinearLayout) inflater.inflate(R.layout.fragment_detail_wide,
                 container, false);
-        mll.setBackgroundColor(Color.LTGRAY);
+        //mll.setBackgroundColor(Color.LTGRAY);
         mTitle = (TextView) mll.findViewById(R.id.detail_title);
         mPlot = (TextView) mll.findViewById(R.id.detail_plot);
         mRating = (TextView) mll.findViewById(R.id.detail_rating_date);
         mImageView = (ImageView) mll.findViewById(R.id.detail_view);
         mButtonFavorite = (Button) mll.findViewById(R.id.detail_button_favorite);
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
-        mll.setLayoutParams(params);
 
         mFont = Typeface.createFromAsset(getActivity().getAssets(),
                 "fontawesome-webfont.ttf");
+
 
         setFavoriteIcon();
         addVideoButtons();
@@ -195,6 +192,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Log.d(LOG_TAG, "Loaded");
         mTitle.setText(mMovie.getTitle());
         Picasso.with(getContext()).load(mMovie.getPosterUri()).into(mImageView);
+
         if (mReviews != null)
             if (mReviews.get(0).getContent() != null)
                 mPlot.setText(mReviews.get(0).getContent());
@@ -268,6 +266,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         if (mShareActionProvider != null) {
             mShareActionProvider.setShareIntent(createShareIntent());
         }
+
     }
 
     @Override
