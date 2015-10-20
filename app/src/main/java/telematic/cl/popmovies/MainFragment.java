@@ -50,11 +50,13 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private static final int MOVIES_LOADER = 0;
 
     static final String MAIN_SORT_URI = "MAIN_SORT_URI";
+    static final String TWO_PANE_URI = "TWO_PANE_URI";
 
 
     private ImageAdapter mAdapter;
 
     private int mSort; // 0 Most Popular, 1 Highest Ranked, 2 Favorites.
+    private boolean mTwoPane;
     private List<Movies.Result> mMovieList;
     private Cursor mCursorData;
 
@@ -102,9 +104,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         Bundle arguments = getArguments();
         if (arguments != null) {
             mSort = arguments.getInt(MainFragment.MAIN_SORT_URI);
-            Log.d(LOG_TAG, String.valueOf(mSort));
+            mTwoPane = arguments.getBoolean(MainFragment.TWO_PANE_URI);
         }
-
 
         mAdapter = new ImageAdapter(getContext());
         GridView gridView = (GridView) inflater.inflate(R.layout.fragment_main, container, false);
@@ -113,7 +114,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                 this.getResources().getInteger(R.integer.columns)
                         * this.getResources().getInteger(R.integer.column_width),
                 ViewGroup.LayoutParams.WRAP_CONTENT));
-        gridView.setLayoutParams(gParams);
+
+        if (mTwoPane)
+            gridView.setLayoutParams(gParams);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
@@ -164,7 +167,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             default:
                 Log.e(LOG_TAG, "Need criteria to load");
                 return null;
-
         }
     }
 

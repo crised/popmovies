@@ -2,6 +2,7 @@ package telematic.cl.popmovies;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -13,6 +14,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -89,7 +91,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
         if (mVideos != null)
             mShareActionProvider.setShareIntent(createShareIntent());
-
     }
 
 
@@ -102,7 +103,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Log.d(LOG_TAG, "In Detail Fragment");
         Bundle arguments = getArguments();
         if (arguments != null) {
             mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
@@ -116,23 +116,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mVote = (TextView) mll.findViewById(R.id.detail_vote);
         mPlot = (TextView) mll.findViewById(R.id.detail_plot);
         mButtonFavorite = (Button) mll.findViewById(R.id.detail_button_favorite);
-
         mTrailersll = (LinearLayout) mll.findViewById(R.id.detail_trailers_ll);
         mReviewsll = (LinearLayout) mll.findViewById(R.id.detail_reviews_ll);
-
-
         mFont = Typeface.createFromAsset(getActivity().getAssets(),
                 "fontawesome-webfont.ttf");
 
-
-        setFavoriteIcon();
-        addVideoButtons();
-
-        return mll;
-
-    }
-
-    private void setFavoriteIcon() {
         mButtonFavorite.setTypeface(mFont);
         mButtonFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,11 +128,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 favoriteStar();
             }
         });
+
+
+        return mll;
+
     }
 
-    private void addVideoButtons() {
-
-    }
 
     private void favoriteStar() {
         ContentValues cv = new ContentValues();
@@ -185,6 +174,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 mReviewsll.addView(textView);
 
             }
+
         }
 
         if (!(mVideos == null || mVideos.isEmpty())) {
@@ -206,6 +196,19 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 button.setPadding(2, 2, 2, 2);
                 mTrailersll.addView(button);
             }
+        }
+
+        Log.d(LOG_TAG,getActivity().getLocalClassName().trim());
+
+        if (getActivity().getLocalClassName().equalsIgnoreCase("DetailActivity")) {
+            Log.d(LOG_TAG,"insidePhone");
+            Resources r = getResources();
+            float width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 185, r.getDisplayMetrics());
+            float height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 262, r.getDisplayMetrics());
+            mImageView.setLayoutParams(new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(
+                    (int) width,
+                    (int) height
+            )));
         }
 
 
@@ -290,6 +293,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         if (mShareActionProvider != null) {
             mShareActionProvider.setShareIntent(createShareIntent());
         }
+        //Adjust Image View on Phone
+
 
     }
 
@@ -297,4 +302,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public void onLoaderReset(Loader<Cursor> loader) {
         loader = null;
     }
+
+
 }

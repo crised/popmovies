@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String DETAIL_FRAGMENT_TAG = "DFTAG";
     private static final String MOVIES_FRAGMENT_TAG = "MFTAG";
-    private boolean mTwoPane;
+    protected boolean mTwoPane;
 
 
     @Override
@@ -36,7 +36,14 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
                             fragmentUponSettings(),
                             MOVIES_FRAGMENT_TAG)
                     .commit();
-        } else mTwoPane = false;
+        } else {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.main_fragment_container,
+                            fragmentUponSettings(),
+                            MOVIES_FRAGMENT_TAG)
+                    .commit();
+            mTwoPane = false;
+        }
     }
 
 
@@ -90,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
         String preference = prefs.getString(getString(R.string.settings_key),
                 getString(R.string.settings_default));
         args.putInt(MainFragment.MAIN_SORT_URI, Integer.valueOf(preference));
+        args.putBoolean(MainFragment.TWO_PANE_URI, mTwoPane);
         mainFragment.setArguments(args);
         return mainFragment;
     }
