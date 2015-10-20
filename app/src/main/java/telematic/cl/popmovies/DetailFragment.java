@@ -11,8 +11,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -54,6 +59,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     private static final int DETAIL_LOADER = 1;
     private Uri mUri;
+    private ShareActionProvider mShareActionProvider;
+
 
     private Movies.Result mMovie;
     private List<Reviews.Result> mReviews;
@@ -73,6 +80,35 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.detail, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        if (mVideos != null)
+            mShareActionProvider.setShareIntent(createShareIntent());
+
+    }
+
+    private Intent createShareIntent() {
+        Log.d(LOG_TAG, "Intent Method!");
+
+        if (mVideos == null || mVideos.isEmpty()) return null;
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType("text/plain");
+        if (mVideos.get(0).getUri() != null) {
+            Log.d(LOG_TAG, "Intent Created!");
+            shareIntent.putExtra(Intent.EXTRA_TEXT,
+                    "See this great Movie! " +
+                            mVideos.get(0).getUri());
+
+
+        }
+        return shareIntent;
+
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         getLoaderManager().initLoader(DETAIL_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
@@ -89,9 +125,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         mll = (LinearLayout) inflater.inflate(R.layout.fragment_detail_wide,
                 container, false);
-
         mll.setBackgroundColor(Color.LTGRAY);
-
         mTitle = (TextView) mll.findViewById(R.id.detail_title);
         mPlot = (TextView) mll.findViewById(R.id.detail_plot);
         mRating = (TextView) mll.findViewById(R.id.detail_rating_date);
@@ -231,6 +265,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         if (!data.moveToFirst()) return;
         transformCursorData(data);
         fillUI();
+        if (mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(createShareIntent());
+        }
     }
 
     @Override
