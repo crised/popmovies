@@ -48,6 +48,10 @@ public class DetailUpdateService extends IntentService {
         updatedCursor.moveToFirst();
         String col_reviews = updatedCursor.getString(COL_REVIEWS);
         String col_videos = updatedCursor.getString(COL_VIDEOS);
+        if(reviews==null || videos == null) {
+            Log.e(LOG_TAG, "No Net!");
+            return;
+        }
         if (!reviews.equals(col_reviews) || !videos.equals(col_videos))
             Log.e(LOG_TAG, "Ouch...");
         //  Log.d(LOG_TAG, updatedCursor.getString(COL_REVIEWS) + updatedCursor.getString(COL_VIDEOS));
